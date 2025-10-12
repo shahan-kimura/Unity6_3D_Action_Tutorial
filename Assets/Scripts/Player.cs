@@ -25,21 +25,38 @@ public class Player : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        var speed = Vector3.zero;
-        speed = new Vector3(moveInput.x, 0, moveInput.y);
-        Move(speed);
+        // Rigidbodyでの移動になるため、FixedUpdateに変更しMove関数を呼び出すだけに
+        Move();
     }
 
     // 指定した速度で、このキャラクターを移動させます。
-    public void Move(Vector3 normalizedSpeed)
+    public void Move()
     {
-        // 等速度運動
-        var velocity = rigidbody.linearVelocity;
-        velocity.x = normalizedSpeed.x * moveSpeed;
-        velocity.z = normalizedSpeed.z * moveSpeed;
-        rigidbody.linearVelocity = velocity;
+        if (Camera.main != null)
+        {
+            // メインカメラの前方と右方向を取得（カメラローカル座標でいうところのz軸とx軸）
+            Vector3 cameraForward = Camera.main.transform.forward;
+            Vector3 cameraRight = Camera.main.transform.right;
+
+            // カメラのy軸方向を無視して、地面に沿った移動にする
+            cameraForward.y = 0;
+            cameraRight.y = 0;
+
+            // 正規化して、カメラの前方と右方向に基づいた移動ベクトルを計算
+            Vector3 moveDirection = (cameraForward * moveInput.y + cameraRight * moveInput.x).normalized;
+
+            // moveInputは2Dベクトルで、プレイヤーの移動入力を表します。
+            // moveInput.x: 左右の移動入力（-1.0f は左、1.0f は右）
+            // moveInput.y: 前後の移動入力（-1.0f は後退、1.0f は前進）
+            // 注意: このmoveInput.yは、ジョイスティックやキーボード入力の前後の動きであり、
+            //       3D空間のY軸（上下方向）とは異なります。
+            //       3D空間のY軸は、物理的な上下移動（ジャンプや落下など）を示します。
+
+            // 移動ベクトルに速度を掛けて移動
+            rigidbody.linearVelocity = moveDirection * moveSpeed + new Vector3(0, rigidbody.linearVelocity.y, 0);
+        }
     }
 
     // このキャラクターをジャンプさせます。
