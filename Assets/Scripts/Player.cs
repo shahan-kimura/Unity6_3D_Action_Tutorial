@@ -26,6 +26,13 @@ public class Player : MonoBehaviour
         //走り判定用のbool
     bool isRun = false;
 
+    //レーザー生成用
+    [SerializeField]
+    GameObject laserPrefab;
+
+    [SerializeField]
+    Transform laserSpawner;
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -119,6 +126,9 @@ public class Player : MonoBehaviour
     // Fire アクションの中身を記述します。
     public void Fire()
     {
+        // レーザーを生成する
+        Instantiate(laserPrefab, laserSpawner.transform.position, laserSpawner.transform.rotation);
+        // レーザー攻撃用のアニメーターにTriggerを送る
         playerAnimator.SetTrigger("SingleLaserAction");
     }
     // Fire のInputによって呼び出されます。
