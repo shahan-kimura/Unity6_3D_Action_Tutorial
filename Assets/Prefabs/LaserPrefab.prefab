@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3696852611137237167}
   - component: {fileID: 8496999404444399762}
   - component: {fileID: 3158042200073554299}
+  - component: {fileID: 6018824697470490811}
   m_Layer: 0
   m_Name: LaserPrefab
   m_TagString: Untagged
@@ -225,3 +226,16 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &6018824697470490811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4435606025123801368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ad62210ce2ae8a4eb4dac0d4b8bb500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  period: 1
