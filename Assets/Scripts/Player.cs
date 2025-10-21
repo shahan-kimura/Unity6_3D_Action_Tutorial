@@ -107,12 +107,26 @@ public class Player : MonoBehaviour
         moveInput = context.ReadValue<Vector2>();
     }
 
-    // Jump アクションによって呼び出されます。
+    // Jump のInputによって呼び出されます。
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.started)
         {
             Jump();
+        }
+    }
+
+    // Fire アクションの中身を記述します。
+    public void Fire()
+    {
+        playerAnimator.SetTrigger("SingleLaserAction");
+    }
+    // Fire のInputによって呼び出されます。
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Fire();
         }
     }
 }
