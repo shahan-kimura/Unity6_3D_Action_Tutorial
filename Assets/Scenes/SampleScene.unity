@@ -570,8 +570,9 @@ GameObject:
   - component: {fileID: 1033395194}
   - component: {fileID: 1033395196}
   - component: {fileID: 1033395195}
-  m_Layer: 0
-  m_Name: WeponVisual
+  - component: {fileID: 1033395197}
+  m_Layer: 6
+  m_Name: PlayerAttack_Wepon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -645,6 +646,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033395193}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!136 &1033395197
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033395193}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.500001
+  m_Height: 2.0000007
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.00000011920929, z: -0.00000166893}
 --- !u!4 &1080449229 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3667946887678727147, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
@@ -1088,6 +1112,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e7e44d35-e2fe-4b7e-af2f-e2071c4b007d
     m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1831250866}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bff0dd76-18a7-4ecb-a498-f8c159193795
+    m_ActionName: 'Player/CrossRangeAttack[/Keyboard/z]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

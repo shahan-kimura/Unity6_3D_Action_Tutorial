@@ -139,4 +139,17 @@ public class Player : MonoBehaviour
             Fire();
         }
     }
+    // Attack のアクションの中身を記述します。
+    public void Attack()
+    {
+        playerAnimator.SetTrigger("CrossRangeAttack");
+    }
+    // Attack のInputによって呼び出されます。
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Attack();
+        }
+    }
 }
