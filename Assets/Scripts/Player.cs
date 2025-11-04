@@ -33,6 +33,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     Transform laserSpawner;
 
+    //攻撃判定（近接武器）用のコライダー
+    [SerializeField]
+    Collider attackCollider;
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -151,5 +155,17 @@ public class Player : MonoBehaviour
         {
             Attack();
         }
+    }
+
+    // 近接攻撃用のコライダーを有効にする関数
+    public void AttackColliderOn()
+    {
+        attackCollider.enabled = true;
+    }
+
+    // 近接攻撃用のコライダーを無効にする関数
+    public void AttackColliderOff()
+    {
+        attackCollider.enabled = false;
     }
 }
