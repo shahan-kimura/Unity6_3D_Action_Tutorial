@@ -20,6 +20,10 @@ public class EnemyActionDash : MonoBehaviour
     // 突進動作のループを停止するために、コルーチンを保持します。
     private Coroutine dashRoutine;
 
+    // 攻撃判定用のコライダー変数
+    [Header("Attack Settings")]
+    [SerializeField] Collider attackCollider;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -81,6 +85,9 @@ public class EnemyActionDash : MonoBehaviour
         // ------------------ 2. 突進実行 ------------------
         startTime = Time.time;
         
+        // 突進開始時に攻撃判定を有効にする
+        AttackColliderOn();
+
         while (Time.time < startTime + dashDuration)
         {
             // Y軸（落下速度）を維持しつつ、水平方向の速度を上書き
@@ -93,6 +100,9 @@ public class EnemyActionDash : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        // 突進終了時に攻撃判定を無効にする
+        AttackColliderOff();
+
         // 突進終了後、水平方向の速度を0にして停止
         Vector3 stopVelocity = rb.linearVelocity;
         stopVelocity.x = 0;
@@ -102,5 +112,26 @@ public class EnemyActionDash : MonoBehaviour
         // ------------------ 3. クールダウン ------------------
         // 次の突進までの待機時間
         yield return new WaitForSeconds(dashCooldown);
+    }
+
+    // 近接攻撃用のコライダーを有効にする関数
+    void AttackColliderOn()
+    {
+        if (attackCollider != null)
+        {
+            attackCollider.enabled = true;
+            Debug.Log("Attack Collider ON");
+            // 💡 攻撃エフェクトや音の再生もここで行う
+        }
+    }
+
+    // 近接攻撃用のコライダーを無効にする関数
+    void AttackColliderOff()
+    {
+        if (attackCollider != null)
+        {
+            attackCollider.enabled = false;
+            Debug.Log("Attack Collider OFF");
+        }
     }
 }
