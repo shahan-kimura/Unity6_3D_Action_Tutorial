@@ -72,17 +72,16 @@ public class EnemyActionDash : MonoBehaviour
         while (Time.time < startTime + dashPreparationTime)
         {
             // ターゲットを凝視し、向きを固定します 
-            transform.LookAt(target.position); 
+            dashDirection = (target.position - transform.position);
+            dashDirection.y = 0; // 水平方向のみ回転させるためY軸は無視
+            rb.rotation = Quaternion.LookRotation(dashDirection); // Rigidbodyの回転を直接操作
+
             // 物理演算のタイミングに合わせて次のフレームを待ちます
             yield return new WaitForFixedUpdate(); 
         }
-
-        // 予備動作が完了した時点のターゲット方向を最終決定
-        dashDirection = (target.position - transform.position);
-        dashDirection.y = 0; // 水平方向のみに突進させるためY軸は無視
-        dashDirection.Normalize();
-
         // ------------------ 2. 突進実行 ------------------
+
+        dashDirection.Normalize();
         startTime = Time.time;
         
         // 突進開始時に攻撃判定を有効にする
