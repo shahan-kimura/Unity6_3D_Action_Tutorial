@@ -1,34 +1,37 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Hitbox : MonoBehaviour
 {
-    // ’ˆÓ: ‚±‚ÌCollider‚ªÕ“Ë‚·‚éğŒ‚ÍAUnity‚ÌuProject Settingsv->uPhysicsv‚Ì
-    //       uLayer Collision Matrixv‚Åİ’è‚³‚ê‚Ä‚¢‚Ü‚·B
-    //       —á: uEnemyAttackvƒŒƒCƒ„[‚ÍuPlayerHitboxvƒŒƒCƒ„[‚Ì‚İÕ“Ë‚ª‹–‰Â‚³‚ê‚Ä‚¢‚é•K—v‚ª‚ ‚è‚Ü‚·B
+    // æ³¨æ„: ã“ã®ColliderãŒè¡çªã™ã‚‹æ¡ä»¶ã¯ã€Unityã®ã€ŒProject Settingsã€->ã€ŒPhysicsã€ã®
+    //       ã€ŒLayer Collision Matrixã€ã§è¨­å®šã•ã‚Œã¦ã„ã¾ã™ã€‚
+    //       ä¾‹: ã€ŒEnemyAttackã€ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¯ã€ŒPlayerHitboxã€ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã¿è¡çªãŒè¨±å¯ã•ã‚Œã¦ã„ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 
-    private StatusManager receiverStatus; // ƒ_ƒ[ƒW‚ğó‚¯‚é‘¤‚ÌStatusManager
+    private StatusManager receiverStatus; // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹å´ã®StatusManager
 
     void Start()
     {
-        // ©g‚ÌeƒIƒuƒWƒFƒNƒg‚©‚çStatusManager‚ğæ“¾
+        // è‡ªèº«ã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰StatusManagerã‚’å–å¾—
         receiverStatus = GetComponentInParent<StatusManager>();
 
         if (receiverStatus == null)
         {
-            Debug.LogError("Hitbox‚Ìe‚ÉStatusManager‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB");
+            Debug.LogError("Hitboxã®è¦ªã«StatusManagerãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
             enabled = false;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Õ“Ë”»’è‚É‚Â‚¢‚ÄF
-        // •¨—ƒGƒ“ƒWƒ“ƒŒƒxƒ‹‚Å‚Ì–‘OƒtƒBƒ‹ƒ^ƒŠƒ“ƒO‚ÍAƒŒƒCƒ„[İ’è‚Ås‚í‚ê‚Ä‚¢‚Ü‚·B(Enemy“¯m‚ª‚Ô‚Â‚©‚ç‚È‚¢‚æ‚¤‚ÉA“™)
-        // Hitbox‚ÆAttack‚ÍA“G‘ÎŠÖŒW‚Ì‚ ‚é‘Šè‚É‚Ì‚İ“–‚½‚è”»’è‚ª‚ ‚éó‘Ô‚Å‚±‚ÌƒXƒNƒŠƒvƒg‚Í‹@”\‚µ‚Ü‚·B
-        // ‚à‚µˆÓ}‚µ‚È‚¢Õ“Ë”»’è‚ª‹N‚«‚½ê‡‚ÍÅ‰‚ÉƒŒƒCƒ„[ƒ}ƒXƒN‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B
+        // è¡çªåˆ¤å®šã«ã¤ã„ã¦ï¼š
+        // ç‰©ç†ã‚¨ãƒ³ã‚¸ãƒ³ãƒ¬ãƒ™ãƒ«ã§ã®äº‹å‰ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°ã¯ã€ãƒ¬ã‚¤ãƒ¤ãƒ¼è¨­å®šã§è¡Œã‚ã‚Œã¦ã„ã¾ã™ã€‚(EnemyåŒå£«ãŒã¶ã¤ã‹ã‚‰ãªã„ã‚ˆã†ã«ã€ç­‰)
+        // Hitboxã¨Attackã¯ã€æ•µå¯¾é–¢ä¿‚ã®ã‚ã‚‹ç›¸æ‰‹ã«ã®ã¿å½“ãŸã‚Šåˆ¤å®šãŒã‚ã‚‹çŠ¶æ…‹ã§ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã¯æ©Ÿèƒ½ã—ã¾ã™ã€‚
+        // ã‚‚ã—æ„å›³ã—ãªã„è¡çªåˆ¤å®šãŒèµ·ããŸå ´åˆã¯æœ€åˆã«ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¹ã‚¯ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚
 
-        // ”í’e‘¤‚ÌStatusManager‚É’Ê’m
-        receiverStatus.Damage();
+        // ğŸ’¡ Step6.1 ä¿®æ­£ç‚¹ï¼šè¡çªã—ãŸç›¸æ‰‹ã® transform.position ã‚’å–å¾—ã™ã‚‹
+        Vector3 attackerPosition = other.transform.position;
+
+        // è¢«å¼¾å´ã®StatusManagerã«é€šçŸ¥
+        receiverStatus.Damage(attackerPosition);
 
     }
 }

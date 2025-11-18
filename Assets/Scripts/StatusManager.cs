@@ -1,36 +1,44 @@
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class StatusManager : MonoBehaviour
 {
-    [SerializeField] GameObject MainObject; //‚±‚ÌƒXƒNƒŠƒvƒg‚ğƒAƒ^ƒbƒ`‚·‚éƒIƒuƒWƒFƒNƒg
-    [SerializeField] int hp = 3;             //hpŒ»İ’l
-    [SerializeField] int maxHp = 3;          //‚¢‚¸‚êmaxHp—˜—p‚·‚éÛ‚Ég—p
+    [SerializeField] GameObject MainObject; //ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ã‚¢ã‚¿ãƒƒãƒã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    [SerializeField] int hp = 3;             //hpç¾åœ¨å€¤
+    [SerializeField] int maxHp = 3;          //ã„ãšã‚ŒmaxHpåˆ©ç”¨ã™ã‚‹éš›ã«ä½¿ç”¨
 
-    [SerializeField] GameObject destroyEffect;  //Œ‚”jƒGƒtƒFƒNƒg
-    [SerializeField] GameObject damageEffect;   //”í’eƒGƒtƒFƒNƒg
+    [SerializeField] GameObject destroyEffect;  //æ’ƒç ´ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+    [SerializeField] GameObject damageEffect;   //è¢«å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+
+    // ğŸ’¡ Step6.1æ–°è¦è¿½åŠ ï¼šãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã“ã¨ã‚’é€šçŸ¥ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
+    // Vector3ã¯æ”»æ’ƒè€…ã®ä½ç½®ã€‚è³¼èª­è€…ã¯ã“ã‚Œã‚’å—ã‘å–ã‚Šã€ãƒãƒƒã‚¯ãƒãƒƒã‚¯æ–¹å‘ã‚’è¨ˆç®—ã—ã¾ã™ã€‚
+    public event Action<Vector3> OnDamageTaken; 
 
     // Update is called once per frame
     void Update()
     {
-        //hp‚ª0ˆÈ‰º‚È‚çAŒ‚”jƒGƒtƒFƒNƒg‚ğ¶¬‚µ‚ÄMain‚ğ”j‰ó
+        //hpãŒ0ä»¥ä¸‹ãªã‚‰ã€æ’ƒç ´ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¦Mainã‚’ç ´å£Š
         if (hp <= 0)
         {
             DestoryMainObject();
         }
     }
 
-    public void Damage()
+    public void Damage(Vector3 attackerPosition)
     {
-        // HP‚ğŒ¸­‚³‚¹Aƒ_ƒ[ƒWƒGƒtƒFƒNƒg‚ğ”­¶‚³‚¹‚é
+        // HPã‚’æ¸›å°‘ã•ã›ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç™ºç”Ÿã•ã›ã‚‹
         hp--;
         var effect = Instantiate(damageEffect);
         effect.transform.position = transform.position;
+
+        // ğŸ’¡ Step6.1æ–°è¦è¿½åŠ ï¼šãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã“ã¨ã‚’é€šçŸ¥ã—ã¾ã™
+        OnDamageTaken?.Invoke(attackerPosition); 
     }
     private void DestoryMainObject()
     {
-        // ”j‰óƒGƒtƒFƒNƒg‚ğ”­¶‚³‚¹‚Ä‚©‚çAMainObject‚Éİ’è‚µ‚½‚à‚Ìi©•ª©g‚â•”ˆÊ”j‰ó‘ÎÛj‚ğ”j‰ó
+        // ç ´å£Šã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç™ºç”Ÿã•ã›ã¦ã‹ã‚‰ã€MainObjectã«è¨­å®šã—ãŸã‚‚ã®ï¼ˆè‡ªåˆ†è‡ªèº«ã‚„éƒ¨ä½ç ´å£Šå¯¾è±¡ï¼‰ã‚’ç ´å£Š
         hp = 0;
         var effect = Instantiate(destroyEffect);
         effect.transform.position = transform.position;
