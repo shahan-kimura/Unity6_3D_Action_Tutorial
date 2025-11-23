@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 💡 このスクリプトは、敵が単体で「突進」と「クールダウン」を繰り返す行動を管理します。
-public class EnemyActionDash : MonoBehaviour
+// 💡Step6.2　継承の仕組みを使って、EnemyActionで定義した事を使えるように変更
+// 敵へ「突進」と「クールダウン」を繰り返す行動を管理します。
+public class EnemyActionDash : EnemyAction
 {
     [SerializeField] Transform target;
     
@@ -36,28 +37,24 @@ public class EnemyActionDash : MonoBehaviour
             enabled = false;
             return;
         }
-
-        // ゲーム開始時に、敵の行動（突進のループ）をすぐに開始します。
-        dashRoutine = StartCoroutine(DashLoopRoutine()); 
     }
 
-    // 💡 外部からこの行動を停止するための命令
+    // 💡Step6.2 継承元のEnemyActionから呼び出された時、この行動を停止するための命令にオーバーライド（上書き）して実行。
     // 敵がスタンした時や破壊された時などに、確実に行動を止められます。
-    public void StopDash()
+    public override void Stop()
     {
         if (dashRoutine != null) StopCoroutine(dashRoutine);
         if (rb != null) rb.linearVelocity = Vector3.zero;
+        AttackColliderOff();
     }
 
-    // 💡 敵が繰り返し行動するために必要なメインのルーチンです。
-    private IEnumerator DashLoopRoutine()
+    // 💡Step6.2 継承元のEnemyActionから呼び出された時、敵が繰り返し行動するために必要なメインのルーチンです。
+    public override IEnumerator Execute()
     {
-        // 敵が破壊されるまで無限に繰り返す
-        while (true)
-        {
-            // 突進の一連の行動（予備動作、突進、クールダウン）が完了するまで待機します。
-            yield return StartCoroutine(DashSequence());
-        }
+        dashRoutine = StartCoroutine(DashSequence());
+
+        // 💡 コルーチンが終わるのを待つ
+        yield return dashRoutine;
     }
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 💡 敵の「監視（警戒しながらターゲットを向いて待機）」という行動だけを管理するスクリプトです。
-public class EnemyActionWatch : MonoBehaviour
+public class EnemyActionWatch : EnemyAction
 {
     // ターゲット（主にPlayer）の情報を入れるための箱です。
     Transform target;
@@ -17,6 +17,7 @@ public class EnemyActionWatch : MonoBehaviour
     [SerializeField] float swayFrequency = 1f;     // 揺れる速さ (周期)
     [SerializeField] float dampingFactor = 0.9f;   // 減衰係数（動きを滑らかに、暴走を防ぐ）
     [SerializeField] float swayTimeOffset;         // ゆらゆら動作の開始時間をずらすためのオフセット
+    [SerializeField] float watchDuration = 3.0f;   // 凝視する時間
 
     // ゲーム開始時に一度だけ呼ばれます
     void Start()
@@ -33,25 +34,20 @@ public class EnemyActionWatch : MonoBehaviour
         }        
 
         swayTimeOffset = Random.Range(0f, 2f * Mathf.PI);   // ゆらゆらのオフセット時間の設定
-
-        // 動作確認のため、ゲームが始まったらすぐに待機行動を開始します。
-        StartWatch();
     }
-    
-    // =========================================================
 
     // 「監視しながら待機する」行動を開始する命令です。
-    public void StartWatch()
+    public override IEnumerator Execute()
     {
-        // もし既に動いている待機ルーチンがあったら、一度止めます。
-        if (watchRoutine != null) StopCoroutine(watchRoutine);
-        
         // 「凝視と待機」の一連の動作をコルーチンとして開始します。
         watchRoutine = StartCoroutine(WatchRoutine());
+
+        // そのコルーチンが終わるまで、親AIを待たせる
+        yield return watchRoutine;
     }
     
     // 「監視しながら待機する」行動を停止する命令です。
-    public void StopWatch()
+    public override void Stop()
     {
         // 実行中のコルーチンを停止します。
         if (watchRoutine != null) StopCoroutine(watchRoutine);
@@ -63,9 +59,11 @@ public class EnemyActionWatch : MonoBehaviour
     private IEnumerator WatchRoutine()
     {
         // 物理演算の処理が終わるタイミングで実行を開始します。（ガクつきを防ぐため）
-        yield return new WaitForFixedUpdate(); 
+        yield return new WaitForFixedUpdate();
 
-        while (true) 
+        float timer = 0f;
+
+        while (timer <　watchDuration) 
         {
             // ----------------------------------------------------
             // 💡 1. Y軸を無視した LookAt の実装（回転）
@@ -105,7 +103,9 @@ public class EnemyActionWatch : MonoBehaviour
             // 3. Rigidbodyに適用
             rb.linearVelocity = finalVelocity;
 
-            yield return new WaitForFixedUpdate();     
+            yield return new WaitForFixedUpdate();
+            
+            timer += Time.fixedDeltaTime;
         }
     }
 }
