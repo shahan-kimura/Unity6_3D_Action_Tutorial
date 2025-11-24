@@ -20,6 +20,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Knockback Settings")]
     [SerializeField] float knockbackPower = 10f;
     [SerializeField] float knockbackDuration = 0.5f;
+    [SerializeField] float actionWaitDuration = 0.2f;
 
     // 現在の状態
     private EnemyState currentState = EnemyState.Battle;
@@ -85,12 +86,12 @@ public class EnemyAI : MonoBehaviour
             yield return StartCoroutine(currentAction.Execute());
 
             // 行動間のインターバル
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(actionWaitDuration);
         }
         else
         {
             // アクションがない場合の待機
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(actionWaitDuration);
         }
     }
 

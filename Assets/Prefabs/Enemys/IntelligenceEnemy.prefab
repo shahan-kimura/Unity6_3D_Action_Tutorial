@@ -220,6 +220,8 @@ GameObject:
   - component: {fileID: 8021482142654438895}
   - component: {fileID: 8478180697490827326}
   - component: {fileID: 3500080156026001987}
+  - component: {fileID: 9041817208286768725}
+  - component: {fileID: 6892756803058640249}
   m_Layer: 0
   m_Name: IntelligenceEnemy
   m_TagString: Enemy
@@ -324,7 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockbackPower: 5
   knockbackDuration: 0.5
-  intervalDuration: 0.2
+  actionWaitDuration: 0.2
 --- !u!114 &8478180697490827326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,3 +362,38 @@ MonoBehaviour:
   dampingFactor: 0.9
   swayTimeOffset: 0
   watchDuration: 3
+--- !u!195 &9041817208286768725
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4249040475002768782}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 4
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0.45
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &6892756803058640249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4249040475002768782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d8e354eda4ef845a57379d8bab4e85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseDuration: 3
