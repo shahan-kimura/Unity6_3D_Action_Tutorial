@@ -324,6 +324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e8fe274bc29a0148bd710c293c712d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRange: 7
   knockbackPower: 5
   knockbackDuration: 0.5
   actionWaitDuration: 0.2
@@ -339,11 +340,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4142d85206e5a54b8ce916e6c2aa753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionType: 0
   target: {fileID: 0}
   dashSpeed: 15
   dashDuration: 0.5
-  dashCooldown: 1
-  dashPreparationTime: 0.5
+  dashCooldown: 2
+  dashPreparationTime: 1
   attackCollider: {fileID: 3801755715768452666}
 --- !u!114 &3500080156026001987
 MonoBehaviour:
@@ -357,11 +359,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec1f47567887964a93698130dae0a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swayAmplitude: 1.5
-  swayFrequency: 1
+  actionType: 0
+  swayAmplitude: 4.5
+  swayFrequency: 5
   dampingFactor: 0.9
   swayTimeOffset: 0
-  watchDuration: 3
+  watchDuration: 2
 --- !u!195 &9041817208286768725
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -396,4 +399,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d8e354eda4ef845a57379d8bab4e85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseDuration: 3
+  actionType: 1
+  chaseDuration: 1

@@ -1,9 +1,11 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 // 💡 状態の定義
 public enum EnemyState
 {
+    Chase,  // 追跡中
     Battle, // 通常行動（今はこれだけ）
     Stun    // ノックバック中
 }
@@ -12,9 +14,15 @@ public class EnemyAI : MonoBehaviour
 {
     private Rigidbody rb;
     private StatusManager statusManager;
+    private Transform target;
 
     // 💡 行動リスト
-    private EnemyAction[] actions;
+    private List<EnemyAction> attackActions = new List<EnemyAction>(); // 攻撃用
+    private EnemyAction chaseAction; // 追跡用
+
+    // Step7.2 追加: 設定項目
+    [Header("AI Settings")]
+    [SerializeField] float attackRange = 7.0f; 
 
     // ノックバック設定
     [Header("Knockback Settings")]
@@ -23,7 +31,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] float actionWaitDuration = 0.2f;
 
     // 現在の状態
-    private EnemyState currentState = EnemyState.Battle;
+    private EnemyState currentState = EnemyState.Chase;
     // 現在実行中のアクション
     private EnemyAction currentAction;
 
@@ -31,13 +39,25 @@ public class EnemyAI : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         statusManager = GetComponent<StatusManager>();
+        target = GameObject.FindWithTag("Player").transform;
 
         // イベント購読
         if (statusManager != null) statusManager.OnDamageTaken += OnDamageTaken;
 
-        // 💡自分についている「EnemyActionを継承したコンポーネント」を全部取ってくる
-        // DashもWatchも、親がEnemyActionだからここに入る。これが継承のパワー！
-        actions = GetComponents<EnemyAction>();
+        // 💡 Step7.2 変更点: 全アクションを取得して、タイプごとに振り分ける
+        var allActions = GetComponents<EnemyAction>();
+        
+        foreach (var action in allActions)
+        {
+            if (action.actionType == ActionType.Chase)
+            {
+                chaseAction = action; // 追跡用として登録
+            }
+            else
+            {
+                attackActions.Add(action); // 攻撃用リストに追加
+            }
+        }
 
         // AIループ開始
         StartCoroutine(MainStateMachine());
@@ -55,6 +75,10 @@ public class EnemyAI : MonoBehaviour
         {
             switch (currentState)
             {
+                case EnemyState.Chase:
+                    yield return StartCoroutine(ChaseRoutine());
+                    break;
+
                 case EnemyState.Battle:
                     yield return StartCoroutine(BattleRoutine());
                     break;
@@ -76,11 +100,11 @@ public class EnemyAI : MonoBehaviour
     // ⚔️ バトル状態のロジック（ランダム行動）
     private IEnumerator BattleRoutine()
     {
-        // アクションがあれば実行
-        if (actions.Length > 0)
+        // アクションがあれば実行（List型に変更したため、LengthではなくCountで要素数を取得）
+        if (attackActions.Count > 0)
         {
             // ランダムに1つ選ぶ
-            currentAction = actions[Random.Range(0, actions.Length)];
+            currentAction = attackActions[Random.Range(0, attackActions.Count)];
 
             // 実行して、終わるまで待つ
             yield return StartCoroutine(currentAction.Execute());
@@ -92,6 +116,42 @@ public class EnemyAI : MonoBehaviour
         {
             // アクションがない場合の待機
             yield return new WaitForSeconds(actionWaitDuration);
+        }
+        // 距離を見て、遠ければChaseに戻る
+        currentState = CheckDistance();
+    }
+    // チェイスを実行
+    private IEnumerator ChaseRoutine()
+    {
+        if (chaseAction != null)
+        {
+            currentAction = chaseAction;
+            // Chaseを実行して、終わるまで待つ
+            yield return StartCoroutine(chaseAction.Execute());
+            currentAction = null;
+        }
+        else
+        {
+            // Chaseがない敵は少し待つ
+            yield return new WaitForSeconds(actionWaitDuration);
+        }
+
+        // 行動が終わったら再判断
+        currentState = CheckDistance();
+    }
+    // 距離を判定する
+    private EnemyState CheckDistance()
+    {
+        float distance = Vector3.Distance(transform.position, target.position);
+        // 攻撃範囲より遠い場合
+        if (distance > attackRange)
+        {
+            return EnemyState.Chase; // 「まだ遠いから追いかけよう（Chase）」
+        }
+        // 攻撃範囲に入っている場合
+        else
+        {
+            return EnemyState.Battle; // 「近いから攻撃しよう（Battle）」
         }
     }
 

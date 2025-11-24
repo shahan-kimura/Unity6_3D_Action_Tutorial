@@ -64,7 +64,8 @@ public class EnemyActionDash : EnemyAction
         // ------------------ 1. 予備動作 (タメ) ------------------
         // 💡 プレイヤーに回避の猶予を与えるため、突進前にタメの時間を設けます。
         float startTime = Time.time;
-        
+        // 予備動作に小ジャンプを追加
+        rb.AddForce(Vector3.up * 3.0f, ForceMode.Impulse);
         // タメ動作中、ターゲットの方を向き続けます
         while (Time.time < startTime + dashPreparationTime)
         {
