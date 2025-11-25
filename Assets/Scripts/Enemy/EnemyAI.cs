@@ -76,11 +76,18 @@ public class EnemyAI : MonoBehaviour
             switch (currentState)
             {
                 case EnemyState.Chase:
-                    yield return StartCoroutine(ChaseRoutine());
+                    // 追跡アクションを実行
+                    yield return StartCoroutine(DoActionRoutine(chaseAction));
                     break;
 
                 case EnemyState.Battle:
-                    yield return StartCoroutine(BattleRoutine());
+                    // 攻撃リストからランダムに選んで実行
+                    EnemyAction selectedAction = null;
+                    if (attackActions.Count > 0)
+                    {
+                        selectedAction = attackActions[Random.Range(0, attackActions.Count)];
+                    }
+                    yield return StartCoroutine(DoActionRoutine(selectedAction));
                     break;
 
                 case EnemyState.Stun:
@@ -97,48 +104,32 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    // ⚔️ バトル状態のロジック（ランダム行動）
-    private IEnumerator BattleRoutine()
+    private IEnumerator DoActionRoutine(EnemyAction action)
     {
-        // アクションがあれば実行（List型に変更したため、LengthではなくCountで要素数を取得）
-        if (attackActions.Count > 0)
+        if (action != null)
         {
-            // ランダムに1つ選ぶ
-            currentAction = attackActions[Random.Range(0, attackActions.Count)];
-
-            // 実行して、終わるまで待つ
-            yield return StartCoroutine(currentAction.Execute());
-
-            // 行動間のインターバル
-            yield return new WaitForSeconds(actionWaitDuration);
-        }
-        else
-        {
-            // アクションがない場合の待機
-            yield return new WaitForSeconds(actionWaitDuration);
-        }
-        // 距離を見て、遠ければChaseに戻る
-        currentState = CheckDistance();
-    }
-    // チェイスを実行
-    private IEnumerator ChaseRoutine()
-    {
-        if (chaseAction != null)
-        {
-            currentAction = chaseAction;
-            // Chaseを実行して、終わるまで待つ
-            yield return StartCoroutine(chaseAction.Execute());
+            // 1. 実行中のアクションとして記録（中断できるようにする）
+            currentAction = action;
+            
+            // 2. アクションを実行し、完了するまで待機
+            // （Chaseなら距離が詰まるまで、Dashなら突進が終わるまで）
+            yield return StartCoroutine(action.Execute());
+            
             currentAction = null;
+            
+            // 3. 行動後のインターバル（隙）
+            yield return new WaitForSeconds(actionWaitDuration);
         }
         else
         {
-            // Chaseがない敵は少し待つ
-            yield return new WaitForSeconds(actionWaitDuration);
+            // アクションがない場合（設定ミスなど）の安全策
+            yield return new WaitForSeconds(1.0f);
         }
 
-        // 行動が終わったら再判断
+        // 4. 行動終了後、距離を再確認して次のステートを決定
         currentState = CheckDistance();
     }
+
     // 距離を判定する
     private EnemyState CheckDistance()
     {
