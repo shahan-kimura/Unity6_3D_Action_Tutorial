@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3158042200073554299}
   - component: {fileID: 7187088585240790699}
   - component: {fileID: 3151126529943540753}
-  - component: {fileID: 6993764782128083786}
+  - component: {fileID: 6326650842404553274}
   m_Layer: 6
   m_Name: LaserPrefab
   m_TagString: Untagged
@@ -245,6 +245,7 @@ MonoBehaviour:
   x_initial_v: 10
   y_initial_v: 10
   z_initial_v: 10
+  lingerTime: 2
 --- !u!82 &3151126529943540753
 AudioSource:
   m_ObjectHideFlags: 0
@@ -342,7 +343,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6993764782128083786
+--- !u!114 &6326650842404553274
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -351,11 +352,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4435606025123801368}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31cd2f1f8923442459064e4bdb4292ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 591ccd4740207f4438641573b5e9f115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainObject: {fileID: 0}
-  hp: 1
-  maxHp: 1
-  destroyEffect: {fileID: 0}
-  damageEffect: {fileID: 0}
+  statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
+  weaponBonus: 0

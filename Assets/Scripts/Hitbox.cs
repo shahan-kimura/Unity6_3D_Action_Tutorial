@@ -27,11 +27,14 @@ public class Hitbox : MonoBehaviour
         // HitboxとAttackは、敵対関係のある相手にのみ当たり判定がある状態でこのスクリプトは機能します。
         // もし意図しない衝突判定が起きた場合は最初にレイヤーマスクを確認してください。
 
-        // 💡 Step6.1 修正点：衝突した相手の transform.position を取得する
-        Vector3 attackerPosition = other.transform.position;
+        // 衝突相手から「攻撃情報 (AttackInfo)」を探す
+        var attackInfo = other.GetComponent<AttackInfo>();
 
-        // 被弾側のStatusManagerに通知
-        receiverStatus.Damage(attackerPosition);
-
+        if (attackInfo != null)
+        {
+            // 💡 修正: 攻撃力(int) と 位置(Vector3) の両方を渡す
+            // TakeDamage ではなく Damage という名前で統一
+            receiverStatus.Damage(attackInfo.CurrentDamage, other.transform.position);
+        }
     }
 }

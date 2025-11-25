@@ -858,6 +858,7 @@ GameObject:
   - component: {fileID: 1033395196}
   - component: {fileID: 1033395195}
   - component: {fileID: 1033395197}
+  - component: {fileID: 1033395198}
   m_Layer: 6
   m_Name: PlayerAttack_Wepon
   m_TagString: Untagged
@@ -956,6 +957,20 @@ CapsuleCollider:
   m_Height: 2.0000007
   m_Direction: 1
   m_Center: {x: 0, y: -0.00000011920929, z: -0.00000166893}
+--- !u!114 &1033395198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033395193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591ccd4740207f4438641573b5e9f115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
+  weaponBonus: 40
 --- !u!4 &1080449229 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3667946887678727147, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
@@ -1636,9 +1651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31cd2f1f8923442459064e4bdb4292ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
   MainObject: {fileID: 1831250861}
-  hp: 30
-  maxHp: 30
   destroyEffect: {fileID: 8962295279383145195, guid: 7cdd99d9641263e498d658cb227be266, type: 3}
   damageEffect: {fileID: 1430198582188953287, guid: 21b15d55fb362544fab3a70419757060, type: 3}
 --- !u!1 &1851280759

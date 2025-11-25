@@ -162,6 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1405092809341926511}
   - component: {fileID: 3801755715768452666}
+  - component: {fileID: 172964473031601984}
   m_Layer: 8
   m_Name: EnemyAttack
   m_TagString: Untagged
@@ -205,6 +206,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &172964473031601984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2410708516727632647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591ccd4740207f4438641573b5e9f115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsData: {fileID: 11400000, guid: 16ffcebebd454444e860a967c925696d, type: 2}
+  weaponBonus: 0
 --- !u!1 &4249040475002768782
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,9 +295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31cd2f1f8923442459064e4bdb4292ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statsData: {fileID: 11400000, guid: 16ffcebebd454444e860a967c925696d, type: 2}
   MainObject: {fileID: 4249040475002768782}
-  hp: 5
-  maxHp: 5
   destroyEffect: {fileID: 1430198582188953287, guid: 21b15d55fb362544fab3a70419757060, type: 3}
   damageEffect: {fileID: 8962295279383145195, guid: 7cdd99d9641263e498d658cb227be266, type: 3}
 --- !u!54 &4085716138102183514
