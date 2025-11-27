@@ -11,6 +11,10 @@ public class StatusManager : MonoBehaviour
 
     [SerializeField] GameObject MainObject;  //このスクリプトをアタッチするオブジェクト
     private int hp ;                             //hp現在値
+
+    // 💡 追加: ポップアップのプレハブ
+    [Header("Effects")]
+    [SerializeField] private DamagePopup popupPrefab;
     [SerializeField] GameObject destroyEffect;  //撃破エフェクト
     [SerializeField] GameObject damageEffect;   //被弾エフェクト
 
@@ -47,6 +51,13 @@ public class StatusManager : MonoBehaviour
         hp -= damage;
         var effect = Instantiate(damageEffect);
         effect.transform.position = transform.position;
+
+        // Step8.2 ダメージポップアップ
+        // 頭上（Y + 1.5m）に出す
+        Vector3 spawnPos = transform.position + Vector3.up * 1.5f;
+        var popup = Instantiate(popupPrefab, spawnPos, Quaternion.identity);
+        // 数値を渡してセットアップ
+        popup.Setup(damage);
 
         // 💡 Step6.1新規追加：ダメージを受けたことを通知します
         OnDamageTaken?.Invoke(attackerPosition); 
