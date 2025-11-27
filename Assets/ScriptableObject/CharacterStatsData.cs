@@ -16,4 +16,14 @@ public class CharacterStatsData : ScriptableObject
     [Header("Critical")]
     [Min(0f)]
     public float CriticalRate = 0.2f;
+
+    // 💡 Step 8.6 追加: 成長パラメーター
+    // レベルが1上がるごとの上昇値
+    [Header("Growth Stats (Per Level)")]
+    public int HpGrowth = 10;               // HP成長率
+    public int AttackGrowth = 2;            // 攻撃成長率
+    public float CritRateGrowth = 0.01f;    // クリ率成長率 (1%)
+
+    [Header("Exp Settings")]
+    public int BaseExpToNext = 100;    // Lv1 -> Lv2 に必要な経験値
 }

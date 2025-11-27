@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHp: 100
   AttackPower: 10
+  CriticalRate: 0.2
+  HpGrowth: 10
+  AttackGrowth: 2
+  CritRateGrowth: 0.01
+  BaseExpToNext: 100

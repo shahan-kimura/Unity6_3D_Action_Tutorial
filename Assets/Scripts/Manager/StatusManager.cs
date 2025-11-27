@@ -11,7 +11,15 @@ public class StatusManager : MonoBehaviour
 
     [SerializeField] GameObject MainObject;  //このスクリプトをアタッチするオブジェクト
     private int hp ;                             //hp現在値
-    
+    private int maxHp;                           // 💡 Step8.6 追加: 計算された最大HP（回復時の上限用）
+
+
+    // 💡 Step8.6 追加: レベル管理用変数
+    [Header("Level System")]
+    [SerializeField] private int level = 1; // ここを変えれば敵の強さが変わる
+    [SerializeField] private int currentExp = 0;
+    [SerializeField] private int expToNextLevel;
+
     // 💡 Step8.3 追加: 現在の攻撃力を管理する変数（レベルアップ等で変動可能）
     [SerializeField] private int currentAttack;
 
@@ -40,21 +48,11 @@ public class StatusManager : MonoBehaviour
     
     void Start()
     {
-        // データがあれば、そこからMaxHpを読み込んで初期化
-        if (statsData != null)
-        {
-            hp = statsData.MaxHp;
-            currentAttack = statsData.AttackPower;  // 💡 Step8.3 追加: 攻撃力もコピーして初期化
-            currentCritRate = statsData.CriticalRate;
+        // 💡 Step8.6 変更: 初期化処理を「ステータス再計算」メソッドへ置き換え
+        UpdateStatus();
 
-        }
-        else
-        {
-            Debug.LogWarning("StatsDataが設定されていません。デフォルト値(100)を使用します。");
-            hp = 100;
-            currentAttack = 10;                     // 💡 Step8.3 追加: デフォルト攻撃力
-            currentCritRate = 0f;
-        }
+        // HPを最大値で開始
+        hp = maxHp;
     }
     // Update is called once per frame
     void Update()
@@ -91,6 +89,58 @@ public class StatusManager : MonoBehaviour
         effect.transform.position = transform.position;
         Destroy(effect, 5);
         Destroy(MainObject);
+    }
+
+    // 💡 Step8.6 追加: ステータス計算メソッド
+    // ScriptableObject(基本値) + Level(成長分) で現在値を決定する
+    private void UpdateStatus()
+    {
+        if (statsData == null)
+        {
+            // データがない場合のフォールバック
+            maxHp = 100;
+            currentAttack = 10;
+            currentCritRate = 0f;
+            return;
+        }
+
+        // レベル補正値（Lv1が基準なので -1）
+        int levelBonus = level - 1;
+
+        // 計算式: 基礎値 + (レベルボーナス * 成長率)
+        maxHp = statsData.MaxHp + (levelBonus * statsData.HpGrowth);
+        currentAttack = statsData.AttackPower + (levelBonus * statsData.AttackGrowth);
+        currentCritRate = statsData.CriticalRate + (levelBonus * statsData.CritRateGrowth);
+
+        // 必要経験値の更新
+        expToNextLevel = statsData.BaseExpToNext + (levelBonus * 50);
+    }
+
+    // 💡 Step8.6 追加: 経験値獲得
+    public void AddExp(int amount)
+    {
+        currentExp += amount;
+        // Expが一定以上でLvUP関数を呼び出し
+        while (currentExp >= expToNextLevel)
+        {
+            currentExp -= expToNextLevel;
+            LevelUp();
+        }
+    }
+
+    // 💡 Step8.6 追加: レベルアップ処理
+    private void LevelUp()
+    {
+        level++;
+
+        // ステータス再計算
+        UpdateStatus();
+
+        // レベルアップ時はHP全回復
+        hp = maxHp;
+
+        // ログ確認用
+        Debug.Log($"LEVEL UP! Lv.{level} HP:{maxHp} ATK:{currentAttack}");
     }
 
 }
