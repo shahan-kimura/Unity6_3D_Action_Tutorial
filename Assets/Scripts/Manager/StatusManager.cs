@@ -20,6 +20,13 @@ public class StatusManager : MonoBehaviour
     {
         get { return currentAttack; }
     }
+    // 💡 Step8.4 追加: 外部（DamageSource）へ現在のCrit率を公開するプロパティ
+    [SerializeField] private float currentCritRate;
+
+    public float CurrentCritRate
+    {
+        get { return currentCritRate; }
+    }
 
     // 💡 追加: ポップアップのプレハブ
     [Header("Effects")]
@@ -38,6 +45,7 @@ public class StatusManager : MonoBehaviour
         {
             hp = statsData.MaxHp;
             currentAttack = statsData.AttackPower;  // 💡 Step8.3 追加: 攻撃力もコピーして初期化
+            currentCritRate = statsData.CriticalRate;
 
         }
         else
@@ -45,7 +53,7 @@ public class StatusManager : MonoBehaviour
             Debug.LogWarning("StatsDataが設定されていません。デフォルト値(100)を使用します。");
             hp = 100;
             currentAttack = 10;                     // 💡 Step8.3 追加: デフォルト攻撃力
-
+            currentCritRate = 0f;
         }
     }
     // Update is called once per frame

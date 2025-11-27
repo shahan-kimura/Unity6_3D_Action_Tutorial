@@ -969,8 +969,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 591ccd4740207f4438641573b5e9f115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
   damageMultiplier: 5
+  criticalMultiplier: 2
 --- !u!4 &1080449229 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3667946887678727147, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
@@ -1653,7 +1653,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
   MainObject: {fileID: 1831250861}
-  popupPrefab: {fileID: 0}
+  currentAttack: 0
+  currentCritRate: 0
+  popupPrefab: {fileID: 3370638208151353108, guid: 3891d86a4744c554b861cb7e782209a5, type: 3}
   destroyEffect: {fileID: 8962295279383145195, guid: 7cdd99d9641263e498d658cb227be266, type: 3}
   damageEffect: {fileID: 1430198582188953287, guid: 21b15d55fb362544fab3a70419757060, type: 3}
 --- !u!1 &1851280759
@@ -1916,10 +1918,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: IntelligenceEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4739237705030279021, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
-      propertyPath: popupPrefab
-      value: 
-      objectReference: {fileID: 3370638208151353108, guid: 3891d86a4744c554b861cb7e782209a5, type: 3}
     - target: {fileID: 7708221162512662985, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

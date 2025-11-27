@@ -13,4 +13,7 @@ public class CharacterStatsData : ScriptableObject
     [Header("Base Stats")]
     public int MaxHp = 100;      // 最大HP
     public int AttackPower = 10; // 基礎攻撃力
+    [Header("Critical")]
+    [Min(0f)]
+    public float CriticalRate = 0.2f;
 }
