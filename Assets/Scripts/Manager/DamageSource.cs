@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 
-// 旧: AttackInfo (リネーム)
+// Criticalに関するEnum
+public enum CriticalType
+{
+    Normal,          // 通常
+    Critical,        // 黄クリ
+    SuperCritical,   // 橙クリ (今回ロジック対応)
+    HyperCritical    // 赤クリ (今回ロジック対応)
+}
+
 // 「ダメージの発生源」として、攻撃の威力を計算するクラス
 public class DamageSource : MonoBehaviour
 {
@@ -30,22 +38,63 @@ public class DamageSource : MonoBehaviour
         this.ownerStatus = owner;
     }
 
-    public int CalculateDamage()
+    // 💡 Step 8.5 変更: 計算結果だけでなく、クリティカルの種類も一緒に返す
+    // 【outキーワードについて】
+    // 戻り値(int)とは別に、もう一つの結果(CriticalType)を呼び出し元に返すための仕組みです。
+    // このメソッドが終わる時、引数で渡された変数 'type' に結果が書き込まれます。
+    public int CalculateDamage(out CriticalType type)
     {
+        type = CriticalType.Normal; // 必ず初期値を設定(return 0だとtypeが返せない)
+
         // 持ち主がいない場合の安全策
         if (ownerStatus == null) return 0;
 
         float finalDamage = ownerStatus.CurrentAttack * damageMultiplier;
 
-        // 💡 Step 8.4 追加: クリティカル判定
-        // ここで倍率をかけるだけで、外部への通知（bool）はまだ行わない
-        if (Random.value < ownerStatus.CurrentCritRate)
-        {
-            finalDamage *= criticalMultiplier;
+        float remainingRate = ownerStatus.CurrentCritRate;
+        int critCount = 0;
 
-            // 確認用ログ
-            Debug.Log("Critical Hit! Damage: " + finalDamage);
+        // 100%を超える確率を考慮してループ処理
+        while (remainingRate > 0f)
+        {
+            if (remainingRate >= 1.0f)
+            {
+                critCount++; // 100%分確定
+                remainingRate -= 1.0f;
+            }
+            else
+            {
+                // 端数の確率判定
+                if (Random.value < remainingRate) critCount++;
+                break;
+            }
         }
+
+        // Crit回数に応じてタイプと倍率を決定
+        switch (critCount)
+        {
+            case 0:
+                type = CriticalType.Normal;
+                break;
+            case 1:
+                type = CriticalType.Critical;
+                finalDamage *= criticalMultiplier;
+                break;
+            case 2:
+                type = CriticalType.SuperCritical;
+                finalDamage *= criticalMultiplier * 2f;
+                break;
+            default: // 3回以上
+                type = CriticalType.HyperCritical;
+                finalDamage *= criticalMultiplier * 3f;
+                break;
+        }
+
+        // ====================================================
+        // 4. 完了：結果を返す
+        // ====================================================
+        // この時点で 'type' には判定結果（NormalやCriticalなど）が入っています。
+        // この 'type' の値は、out引数を通じて呼び出し元に渡されます。
 
         return Mathf.RoundToInt(finalDamage);
     }

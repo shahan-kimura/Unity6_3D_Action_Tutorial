@@ -10,13 +10,36 @@ public class DamagePopup : MonoBehaviour
     [SerializeField] float moveSpeed = 2.0f;
     [SerializeField] float lifeTime = 1.0f;
 
-    // 💡 生成時に呼ばれる初期化メソッド
-    public void Setup(int damageAmount)
-    {
-        // 数値をテキストに反映
-        textMesh.text = damageAmount.ToString();
+    [Header("Visuals")]
+    [SerializeField] Color normalColor = Color.white;
+    [SerializeField] Color criticalColor = Color.yellow;
+    [SerializeField] Color superCriticalColor = new Color(1f, 0.5f, 0f); // オレンジ
+    [SerializeField] Color hyperCriticalColor = Color.red;
 
-        // 指定時間後に消滅
+    // 💡 Step 8.5 変更: Enumを受け取って分岐
+    public void Setup(int damage, CriticalType type)
+    {
+        textMesh.text = damage.ToString();
+
+        switch (type)
+        {
+            case CriticalType.Normal:
+                textMesh.color = normalColor;
+                break;
+            case CriticalType.Critical:
+                textMesh.color = criticalColor;
+                transform.localScale *= 1.5f;
+                break;
+            case CriticalType.SuperCritical:
+                textMesh.color = superCriticalColor;
+                transform.localScale *= 2.0f;
+                break;
+            case CriticalType.HyperCritical:
+                textMesh.color = hyperCriticalColor;
+                transform.localScale *= 2.5f;
+                break;
+        }
+
         Destroy(gameObject, lifeTime);
     }
 

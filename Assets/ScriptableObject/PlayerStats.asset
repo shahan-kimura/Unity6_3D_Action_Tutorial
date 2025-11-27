@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHp: 100
   AttackPower: 10
+  CriticalRate: 1.5

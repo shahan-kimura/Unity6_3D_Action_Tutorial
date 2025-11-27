@@ -65,8 +65,8 @@ public class StatusManager : MonoBehaviour
             DestoryMainObject();
         }
     }
-
-    public void Damage(int damage,Vector3 attackerPosition)
+    // 💡 Step 8.5 変更: 引数に CriticalType を追加
+    public void Damage(int damage, Vector3 attackerPosition, CriticalType type)
     {
         // HPを減少させ、ダメージエフェクトを発生させる
         hp -= damage;
@@ -78,7 +78,7 @@ public class StatusManager : MonoBehaviour
         Vector3 spawnPos = transform.position + Vector3.up * 1.5f;
         var popup = Instantiate(popupPrefab, spawnPos, Quaternion.identity);
         // 数値を渡してセットアップ
-        popup.Setup(damage);
+        popup.Setup(damage,type);
 
         // 💡 Step6.1新規追加：ダメージを受けたことを通知します
         OnDamageTaken?.Invoke(attackerPosition); 

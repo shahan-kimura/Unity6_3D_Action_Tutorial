@@ -32,10 +32,12 @@ public class Hitbox : MonoBehaviour
 
         if (source != null)
         {
-            // 💡 変更点: プロパティ参照ではなく、メソッド呼び出しで数値をもらう
-            int calcDamage = source.CalculateDamage();
-            // 💡 修正: 攻撃力(int) と 位置(Vector3) の両方を渡す
-            receiverStatus.Damage(calcDamage, other.transform.position);
+            // 💡 Step 8.5 変更: Enumを受け取る
+            CriticalType type;
+            int damage = source.CalculateDamage(out type);
+
+            // ダメージとタイプを渡す
+            receiverStatus.Damage(damage, other.transform.position, type);
         }
     }
 }
