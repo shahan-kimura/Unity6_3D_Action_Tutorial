@@ -27,14 +27,15 @@ public class Hitbox : MonoBehaviour
         // HitboxとAttackは、敵対関係のある相手にのみ当たり判定がある状態でこのスクリプトは機能します。
         // もし意図しない衝突判定が起きた場合は最初にレイヤーマスクを確認してください。
 
-        // 衝突相手から「攻撃情報 (AttackInfo)」を探す
-        var attackInfo = other.GetComponent<AttackInfo>();
+        // 💡 Step8.1Fix　変更点: AttackInfo ではなく DamageSource を探す
+        var source = other.GetComponent<DamageSource>();
 
-        if (attackInfo != null)
+        if (source != null)
         {
+            // 💡 変更点: プロパティ参照ではなく、メソッド呼び出しで数値をもらう
+            int calcDamage = source.CalculateDamage();
             // 💡 修正: 攻撃力(int) と 位置(Vector3) の両方を渡す
-            // TakeDamage ではなく Damage という名前で統一
-            receiverStatus.Damage(attackInfo.CurrentDamage, other.transform.position);
+            receiverStatus.Damage(calcDamage, other.transform.position);
         }
     }
 }

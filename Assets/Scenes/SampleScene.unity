@@ -970,7 +970,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
-  weaponBonus: 40
+  damageMultiplier: 5
 --- !u!4 &1080449229 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3667946887678727147, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
