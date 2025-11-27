@@ -355,5 +355,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 591ccd4740207f4438641573b5e9f115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
-  weaponBonus: 0
+  damageMultiplier: 1.5

@@ -11,6 +11,15 @@ public class StatusManager : MonoBehaviour
 
     [SerializeField] GameObject MainObject;  //このスクリプトをアタッチするオブジェクト
     private int hp ;                             //hp現在値
+    
+    // 💡 Step8.3 追加: 現在の攻撃力を管理する変数（レベルアップ等で変動可能）
+    [SerializeField] private int currentAttack;
+
+    // 💡 Step8.3 追加: 外部（DamageSource）へ現在の攻撃力を公開するプロパティ
+    public int CurrentAttack
+    {
+        get { return currentAttack; }
+    }
 
     // 💡 追加: ポップアップのプレハブ
     [Header("Effects")]
@@ -28,11 +37,15 @@ public class StatusManager : MonoBehaviour
         if (statsData != null)
         {
             hp = statsData.MaxHp;
+            currentAttack = statsData.AttackPower;  // 💡 Step8.3 追加: 攻撃力もコピーして初期化
+
         }
         else
         {
             Debug.LogWarning("StatsDataが設定されていません。デフォルト値(100)を使用します。");
             hp = 100;
+            currentAttack = 10;                     // 💡 Step8.3 追加: デフォルト攻撃力
+
         }
     }
     // Update is called once per frame

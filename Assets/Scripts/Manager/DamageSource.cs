@@ -4,9 +4,8 @@
 // 「ダメージの発生源」として、攻撃の威力を計算するクラス
 public class DamageSource : MonoBehaviour
 {
-    [Header("Data Source")]
-    // 💡 変数名は statsData のまま維持（8.1からの継続性）
-    [SerializeField] private CharacterStatsData statsData;
+    // 持ち主のStatusManagerを保持する変数
+    private StatusManager ownerStatus;
 
     [Header("Attack Specs")]
     // 💡 変更点: 固定値加算をやめ、「倍率（Multiplier）」に変更
@@ -14,9 +13,9 @@ public class DamageSource : MonoBehaviour
     [SerializeField] private float damageMultiplier = 1.0f;
 
     // 外部から動的に持ち主をセットする場合のメソッド
-    public void Initialize(CharacterStatsData owner)
+    public void Initialize(StatusManager owner)
     {
-        this.statsData = owner;
+        this.ownerStatus = owner;
     }
 
     // 💡 変更点: プロパティをやめ、メソッドにする
@@ -24,9 +23,14 @@ public class DamageSource : MonoBehaviour
     public int CalculateDamage()
     {
         // 持ち主がいない場合の安全策
-        if (statsData == null) return 0;
+        if (ownerStatus == null) return 0;
+
+        // 💡 1. 持ち主から「今の攻撃力」をもらう
+        // ここでアクセスしている CurrentAttack は、
+        // StatusManagerで「変数の値を返す」ように修正されたプロパティです。
+        int baseAttack = ownerStatus.CurrentAttack;
 
         // 基礎攻撃力 × 倍率 を計算し、整数に直して返す
-        return Mathf.RoundToInt(statsData.AttackPower * damageMultiplier);
+        return Mathf.RoundToInt(baseAttack * damageMultiplier);
     }
 }

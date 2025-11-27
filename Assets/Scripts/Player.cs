@@ -131,7 +131,12 @@ public class Player : MonoBehaviour
     public void Fire()
     {
         // レーザーを生成する
-        Instantiate(laserPrefab, laserSpawner.transform.position, laserSpawner.transform.rotation);
+        GameObject laser = Instantiate(laserPrefab, laserSpawner.transform.position, laserSpawner.transform.rotation);
+        // 💡 Step 8.3 追加: 持ち主の登録
+        DamageSource source = laser.GetComponent<DamageSource>();
+        // 自分の StatusManager を渡して初期化する
+        source.Initialize(GetComponent<StatusManager>());
+
         // レーザー攻撃用のアニメーターにTriggerを送る
         playerAnimator.SetTrigger("SingleLaserAction");
     }
