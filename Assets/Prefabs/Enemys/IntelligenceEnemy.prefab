@@ -344,6 +344,7 @@ GameObject:
   - component: {fileID: 3500080156026001987}
   - component: {fileID: 9041817208286768725}
   - component: {fileID: 6892756803058640249}
+  - component: {fileID: 3857339114335097008}
   m_Layer: 0
   m_Name: IntelligenceEnemy
   m_TagString: Enemy
@@ -528,3 +529,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionType: 1
   chaseDuration: 1
+--- !u!114 &3857339114335097008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4249040475002768782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6528953d68bb535488be6b7484187278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vfx: {fileID: 1951604933006099710}
+  propertyName: GlitchIntensity
+  trailPropertyName: TrailRate
+  glitchDuration: 0.5
+  glitchPower: 25
