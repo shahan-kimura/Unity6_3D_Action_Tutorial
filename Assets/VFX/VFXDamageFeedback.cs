@@ -13,6 +13,9 @@ public class VFXDamageFeedback : MonoBehaviour
     [SerializeField] float glitchDuration = 0.2f; // 一瞬だけ揺らす
     [SerializeField] float glitchPower = 25f;    // Turbulenceの強さ（20〜25くらい）
 
+    // 💡 追加: 死亡演出中かどうかのフラグ
+    private bool isDying = false;
+
     private StatusManager status;
 
     void Start()
@@ -25,17 +28,25 @@ public class VFXDamageFeedback : MonoBehaviour
         if (status != null)
         {
             status.OnDamageTaken += PlayGlitch;
+            status.OnDead += PlayDeathEffect;
         }
     }
 
     void OnDestroy()
     {
-        if (status != null) status.OnDamageTaken -= PlayGlitch;
+        if (status != null)
+        {
+            status.OnDamageTaken -= PlayGlitch;
+            status.OnDead -= PlayDeathEffect;
+        }
     }
 
     // ダメージイベントから呼ばれる
     void PlayGlitch(Vector3 attackerPos)
     {
+        // 💡 修正: 死に始めていたら、グリッチ演出は無視する（StopAllCoroutinesさせない！）
+        if (isDying) return;
+
         // 既に揺れていても上書きして再生
         StopAllCoroutines();
         StartCoroutine(GlitchRoutine());
@@ -59,5 +70,30 @@ public class VFXDamageFeedback : MonoBehaviour
             vfx.SetFloat(trailPropertyName, 1f);        // ★トレイルをONに戻す
             vfx.SetFloat(propertyName, 0f);             // ノイズOFF
         }
+    }
+    // Step10.2 死亡時のVFX Event
+    void PlayDeathEffect()
+    {
+        // 💡 追加: 死亡フラグを立てる
+        isDying = true;
+
+        status.OnDead -= PlayDeathEffect; // 二重呼び出し防止
+        StartCoroutine(DeathSequence());
+    }
+
+    IEnumerator DeathSequence()
+    {
+        // 1. VFX切り替え（本体消去＋爆発生成）
+        if (vfx != null)
+        {
+            vfx.SetBool("IsDead", true);
+            vfx.SendEvent("OnDeath");
+        }
+
+        // 2. 余韻を待つ（VFXのLifetimeに合わせる）
+        yield return new WaitForSeconds(3.0f);
+        Debug.Log("Dead2");
+        // 3. 完全消滅（掃除）
+        Destroy(gameObject);
     }
 }

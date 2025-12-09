@@ -42,7 +42,11 @@ public class EnemyAI : MonoBehaviour
         target = GameObject.FindWithTag("Player").transform;
 
         // イベント購読
-        if (statusManager != null) statusManager.OnDamageTaken += OnDamageTaken;
+        if (statusManager != null)
+        {
+            statusManager.OnDamageTaken += OnDamageTaken;
+            statusManager.OnDead += OnDeadHandler;
+        }
 
         // 💡 Step7.2 変更点: 全アクションを取得して、タイプごとに振り分ける
         var allActions = GetComponents<EnemyAction>();
@@ -65,7 +69,11 @@ public class EnemyAI : MonoBehaviour
 
     void OnDestroy()
     {
-        if (statusManager != null) statusManager.OnDamageTaken -= OnDamageTaken;
+        if (statusManager != null)
+        {
+            statusManager.OnDamageTaken -= OnDamageTaken;
+            statusManager.OnDead -= OnDeadHandler;
+        }
     }
 
     // 🧠 メインステートマシン（思考のループ）
@@ -179,5 +187,25 @@ public class EnemyAI : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         Vector3 force = (dir * knockbackPower) + (Vector3.up * knockbackPower);
         rb.AddForce(force, ForceMode.Impulse);
+    }
+    // Step10.2 死亡時の動作停止処理
+    void OnDeadHandler()
+    {
+        // 1. 思考停止
+        StopAllCoroutines();
+
+        // 2. 物理停止
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.linearVelocity = Vector3.zero;
+        }
+
+        // 3. 当たり判定消去
+        var col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // 4. 自分をOFF
+        this.enabled = false;
     }
 }

@@ -13,6 +13,7 @@ public class StatusManager : MonoBehaviour
     private int hp ;                             //hp現在値
     private int maxHp;                           // 💡 Step8.6 追加: 計算された最大HP（回復時の上限用）
 
+    private bool isDead = false; // フラグ追加
 
     // 💡 Step8.6 追加: レベル管理用変数
     [Header("Level System")]
@@ -44,8 +45,10 @@ public class StatusManager : MonoBehaviour
 
     // 💡 Step6.1新規追加：ダメージを受けたことを通知するイベント
     // Vector3は攻撃者の位置。購読者はこれを受け取り、ノックバック方向を計算します。
-    public event Action<Vector3> OnDamageTaken; 
-    
+    public event Action<Vector3> OnDamageTaken;
+    // Step10.2 死亡演出をイベント化
+    public event Action OnDead;
+
     void Start()
     {
         // 💡 Step8.6 変更: 初期化処理を「ステータス再計算」メソッドへ置き換え
@@ -53,15 +56,6 @@ public class StatusManager : MonoBehaviour
 
         // HPを最大値で開始
         hp = maxHp;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        //hpが0以下なら、撃破エフェクトを生成してMainを破壊
-        if (hp <= 0)
-        {
-            DestoryMainObject();
-        }
     }
     // 💡 Step 8.5 変更: 引数に CriticalType を追加
     public void Damage(int damage, Vector3 attackerPosition, CriticalType type)
@@ -79,16 +73,29 @@ public class StatusManager : MonoBehaviour
         popup.Setup(damage,type);
 
         // 💡 Step6.1新規追加：ダメージを受けたことを通知します
-        OnDamageTaken?.Invoke(attackerPosition); 
+        OnDamageTaken?.Invoke(attackerPosition);
+        
+        //　Step10.2 hpが0以下の際の処理を移動
+        if (hp <= 0)
+        {
+            DestoryMainObject();
+        }
+
     }
     private void DestoryMainObject()
     {
+        // ★追加: 死んでたら即帰る（イベントも飛ばさない）
+        if (isDead) return;
+        isDead = true; // ★死亡確定
+
         // 破壊エフェクトを発生させてから、MainObjectに設定したもの（自分自身や部位破壊対象）を破壊
         hp = 0;
         var effect = Instantiate(destroyEffect);
         effect.transform.position = transform.position;
         Destroy(effect, 5);
-        Destroy(MainObject);
+
+        // Step10.2 自身でDestroyせず、イベントで知らせる
+        OnDead?.Invoke();
     }
 
     // 💡 Step8.6 追加: ステータス計算メソッド
