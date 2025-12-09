@@ -205,7 +205,14 @@ public class EnemyAI : MonoBehaviour
         var col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
 
-        // 4. 自分をOFF
+        // 4. ターゲットから外す（★修正箇所）
+        // 自分自身(this)を含む、すべての子階層のTransformを取得して回す
+        foreach (Transform t in GetComponentsInChildren<Transform>())
+        {
+            t.tag = "Untagged";
+        }
+
+        // 5. 自分をOFF
         this.enabled = false;
     }
 }
