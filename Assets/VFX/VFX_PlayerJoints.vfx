@@ -107,7 +107,7 @@ MonoBehaviour:
     x: 495
     y: -498
     width: 659
-    height: 1256
+    height: 1240
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -765,7 +765,7 @@ MonoBehaviour:
       slotIndex: 0
   m_OutputFlowSlot:
   - link: []
-  blendMode: 1
+  blendMode: 3
   cullMode: 3
   zWriteMode: 0
   zTestMode: 0
@@ -1891,7 +1891,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.0,"y":3.9391424655914308,"z":0.15578489005565644}'
+      m_SerializableObject: '{"x":0.0,"y":4.867143630981445,"z":0.19248540699481965}'
     m_Space: -1
   m_Property:
     name: _Color
