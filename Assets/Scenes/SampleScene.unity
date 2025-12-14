@@ -1960,6 +1960,7 @@ GameObject:
   - component: {fileID: 1831250863}
   - component: {fileID: 1831250866}
   - component: {fileID: 1831250867}
+  - component: {fileID: 1831250868}
   m_Layer: 0
   m_Name: PlayerRoot
   m_TagString: Player
@@ -2206,6 +2207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statsData: {fileID: 11400000, guid: bc67924188994ae4db0e7c9d2d6ebebe, type: 2}
   MainObject: {fileID: 1831250861}
+  hp: 0
+  maxHp: 0
   level: 1
   currentExp: 0
   expToNextLevel: 0
@@ -2214,6 +2217,22 @@ MonoBehaviour:
   popupPrefab: {fileID: 3370638208151353108, guid: 3891d86a4744c554b861cb7e782209a5, type: 3}
   destroyEffect: {fileID: 8962295279383145195, guid: 7cdd99d9641263e498d658cb227be266, type: 3}
   damageEffect: {fileID: 1430198582188953287, guid: 21b15d55fb362544fab3a70419757060, type: 3}
+--- !u!114 &1831250868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831250861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df5380201dc8ced4ba57baa1f630115c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  status: {fileID: 1831250867}
+  targetVFX: {fileID: 1839589865}
+  healthyColor: {r: 0, g: 4, b: 4, a: 4}
+  criticalColor: {r: 4, g: 0, b: 0, a: 4}
 --- !u!1 &1839589861 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7882376022164389543, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}

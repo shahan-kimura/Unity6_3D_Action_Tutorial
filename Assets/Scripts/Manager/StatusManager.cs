@@ -10,8 +10,8 @@ public class StatusManager : MonoBehaviour
     [SerializeField] private CharacterStatsData statsData;
 
     [SerializeField] GameObject MainObject;  //このスクリプトをアタッチするオブジェクト
-    private int hp ;                             //hp現在値
-    private int maxHp;                           // 💡 Step8.6 追加: 計算された最大HP（回復時の上限用）
+    [SerializeField] private int hp ;                             //hp現在値
+    [SerializeField] private int maxHp;                           // 💡 Step8.6 追加: 計算された最大HP（回復時の上限用）
 
     private bool isDead = false; // フラグ追加
 
@@ -35,6 +35,15 @@ public class StatusManager : MonoBehaviour
     public float CurrentCritRate
     {
         get { return currentCritRate; }
+    }
+    // Step12.1 HPのプロパティ化（UI読み出し用）
+    public float MaxHp
+    {
+        get { return maxHp; }
+    }
+    public float CurrentHp
+    {
+        get { return hp; }
     }
 
     // 💡 追加: ポップアップのプレハブ
