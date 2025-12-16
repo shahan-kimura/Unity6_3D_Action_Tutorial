@@ -5,7 +5,8 @@ using System.Collections;
 public class VFXDamageFeedback : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] VisualEffect vfx;
+    // 💡 Step12.2 単体ではなく配列で持つ
+    private VisualEffect[] allVFXs;
     [SerializeField] string propertyName = "GlitchIntensity";
     [SerializeField] string trailPropertyName = "TrailRate";
 
@@ -20,8 +21,9 @@ public class VFXDamageFeedback : MonoBehaviour
 
     void Start()
     {
-        // 親子関係を考慮して取得
-        if (vfx == null) vfx = GetComponentInChildren<VisualEffect>();
+        // 💡 Step12.2 自分以下の全てのVFXを自動取得する
+        // これならSurfaceだろうがJointsだろうが武器だろうが全部取れる
+        allVFXs = GetComponentsInChildren<VisualEffect>();
         status = GetComponent<StatusManager>();
 
         // イベント購読
@@ -55,20 +57,27 @@ public class VFXDamageFeedback : MonoBehaviour
     IEnumerator GlitchRoutine()
     {
         // 1. ノイズON（数値を渡す）
-        if (vfx != null)
+        // 💡 配列内のすべてのVFXに対して設定
+        foreach (var v in allVFXs)
         {
-            vfx.SetFloat(trailPropertyName, 0f);        // ★トレイルをOFF！
-            vfx.SetFloat(propertyName, glitchPower);    // ノイズON
+            if (v != null)
+            {
+                v.SetFloat(trailPropertyName, 0f);     // トレイルOFF（敵用）
+                v.SetFloat(propertyName, glitchPower); // ノイズON
+            }
         }
 
         // 2. 指定時間待つ
         yield return new WaitForSeconds(glitchDuration);
 
         // 3. ノイズOFF（0に戻す）
-        if (vfx != null)
+        foreach (var v in allVFXs)
         {
-            vfx.SetFloat(trailPropertyName, 1f);        // ★トレイルをONに戻す
-            vfx.SetFloat(propertyName, 0f);             // ノイズOFF
+            if (v != null)
+            {
+                v.SetFloat(trailPropertyName, 1f);     // トレイルON（敵用）
+                v.SetFloat(propertyName, 0f);          // ノイズOFF
+            }
         }
     }
     // Step10.2 死亡時のVFX Event
@@ -84,16 +93,32 @@ public class VFXDamageFeedback : MonoBehaviour
     IEnumerator DeathSequence()
     {
         // 1. VFX切り替え（本体消去＋爆発生成）
-        if (vfx != null)
+        foreach (var v in allVFXs)
         {
-            vfx.SetBool("IsDead", true);
-            vfx.SendEvent("OnDeath");
+            if (v != null)
+            {
+                // 本体を消す (System 1 の Kill が作動)
+                v.SetBool("IsDead", true);
+                // 爆発させる (System 3 が作動)
+                v.SendEvent("OnDeath");
+            }
         }
 
         // 2. 余韻を待つ（VFXのLifetimeに合わせる）
         yield return new WaitForSeconds(3.0f);
-        Debug.Log("Dead2");
-        // 3. 完全消滅（掃除）
-        Destroy(gameObject);
+        
+        // 3. 後始末
+        if (gameObject.CompareTag("Player"))
+        {
+            // 💡 プレイヤーの場合：消さずに非表示＆ゲームオーバー処理
+            Debug.Log("<color=red>GAME OVER</color>");
+            gameObject.SetActive(false);
+            // ※ここでTime.timeScale = 0; とか SceneManager.LoadScene などを呼ぶのが一般的
+        }
+        else
+        {
+            // 敵の場合：消滅
+            Destroy(gameObject);
+        }
     }
 }

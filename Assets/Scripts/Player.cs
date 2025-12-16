@@ -37,9 +37,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     Collider attackCollider;
 
+    private StatusManager statusManager;
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
+
+        statusManager = GetComponent<StatusManager>();
+        // イベント購読
+        if (statusManager != null)
+        {
+            statusManager.OnDead += OnDeadHandler;
+        }
     }
 
     void FixedUpdate()
@@ -172,5 +181,32 @@ public class Player : MonoBehaviour
     public void AttackColliderOff()
     {
         attackCollider.enabled = false;
+    }
+
+    // Step12.2 死亡イベントの受け取り
+    void OnDestroy()
+    {
+        if (statusManager != null) statusManager.OnDead -= OnDeadHandler;
+    }
+
+    // 死亡時の処理
+    void OnDeadHandler()
+    {
+        // 1. 操作ロック
+        this.enabled = false;
+
+        // 2. 当たり判定を消す
+        var col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // 3. 物理を止める
+        if (GetComponent<Rigidbody>() != null)
+        {
+            GetComponent<Rigidbody>().isKinematic = true;
+            GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        }
+
+        // 4. ゲームオーバーログ
+        Debug.Log("<color=red>GAME OVER</color>");
     }
 }

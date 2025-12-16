@@ -936,7 +936,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983533346}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 993719fbe1933f94cb5089ab15f3a6d7, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: cb8bd4b62fb3fd141b7e18add6cdaa08, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -955,7 +955,10 @@ VisualEffect:
     m_Uint:
       m_Array: []
     m_Int:
-      m_Array: []
+      m_Array:
+      - m_Value: 2000
+        m_Name: SpawnRate
+        m_Overridden: 1
     m_Matrix4x4f:
       m_Array: []
     m_AnimationCurve:
@@ -1961,6 +1964,7 @@ GameObject:
   - component: {fileID: 1831250866}
   - component: {fileID: 1831250867}
   - component: {fileID: 1831250868}
+  - component: {fileID: 1831250869}
   m_Layer: 0
   m_Name: PlayerRoot
   m_TagString: Player
@@ -2233,6 +2237,22 @@ MonoBehaviour:
   targetVFX: {fileID: 1839589865}
   healthyColor: {r: 0, g: 4, b: 4, a: 4}
   criticalColor: {r: 4, g: 0, b: 0, a: 4}
+--- !u!114 &1831250869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831250861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6528953d68bb535488be6b7484187278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertyName: GlitchIntensity
+  trailPropertyName: TrailRate
+  glitchDuration: 0.2
+  glitchPower: 25
 --- !u!1 &1839589861 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7882376022164389543, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
@@ -2497,6 +2517,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3853268898807207900, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
       propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148737315974723067, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6148737315974723067, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
