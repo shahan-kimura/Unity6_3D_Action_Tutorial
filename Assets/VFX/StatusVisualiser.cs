@@ -8,6 +8,8 @@ public class StatusVisualizer : MonoBehaviour
 
     // 色を変える対象（Surfaceのみ指定する想定）
     [SerializeField] private VisualEffect targetVFX;
+    // Step12.4 経験値等表示用VFX
+    [SerializeField] private VisualEffect statusVFX;
 
     [Header("HP Settings")]
     [ColorUsage(true, true)]
@@ -23,6 +25,9 @@ public class StatusVisualizer : MonoBehaviour
     void Update()
     {
         if (status == null || targetVFX == null) return;
+
+        // 💡 追加: ステータス更新
+        if (statusVFX != null) UpdateStatusVisuals();
 
         UpdateHPVisuals();
     }
@@ -47,5 +52,19 @@ public class StatusVisualizer : MonoBehaviour
 
         // 4. VFXに適用
         targetVFX.SetVector4("BodyColor", currentColor);
+    }
+
+    private void UpdateStatusVisuals()
+    {
+        // 1. EXP率の計算 (0.0 〜 1.0)
+        float expRatio = 0f;
+        if (status.ExpToNextLevel > 0)
+        {
+            expRatio = (float)status.CurrentExp / status.ExpToNextLevel;
+        }
+
+        // 2. VFXに送信
+        statusVFX.SetFloat("ExpRatio", expRatio);
+        statusVFX.SetFloat("Level", (float)status.Level);
     }
 }

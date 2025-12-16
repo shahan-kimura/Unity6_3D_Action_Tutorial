@@ -46,6 +46,11 @@ public class StatusManager : MonoBehaviour
         get { return hp; }
     }
 
+    // Step12.4 UI用各種数値のプロパティ、Get専用ならこう書くととても短く表記できるよ！
+    public int Level => level;
+    public int CurrentExp => currentExp;
+    public int ExpToNextLevel => expToNextLevel;
+
     // 💡 追加: ポップアップのプレハブ
     [Header("Effects")]
     [SerializeField] private DamagePopup popupPrefab;
