@@ -2252,7 +2252,7 @@ MonoBehaviour:
   propertyName: GlitchIntensity
   trailPropertyName: TrailRate
   glitchDuration: 0.2
-  glitchPower: 25
+  glitchPower: 0.1
 --- !u!1 &1839589861 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7882376022164389543, guid: 5681276c5622ac1448ef080b4ed4b76c, type: 3}
