@@ -16,6 +16,12 @@ public class EnemyAI : MonoBehaviour
     private StatusManager statusManager;
     private Transform target;
 
+    [Header("DefaultTarget")]
+    [SerializeField] private string defaultTargetTag = "Payload"; // デフォルトの狙い
+
+    // 💡 Step 13.1: 外部（ActionChaseなど）に現在のターゲットを公開するプロパティ
+    public Transform CurrentTarget => target;
+
     // 💡 行動リスト
     private List<EnemyAction> attackActions = new List<EnemyAction>(); // 攻撃用
     private EnemyAction chaseAction; // 追跡用
@@ -39,7 +45,11 @@ public class EnemyAI : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         statusManager = GetComponent<StatusManager>();
-        target = GameObject.FindWithTag("Player").transform;
+        // ターゲットを初期設定
+        if (target == null)
+        {
+            SearchDefaultTarget();
+        }
 
         // イベント購読
         if (statusManager != null)
@@ -141,6 +151,15 @@ public class EnemyAI : MonoBehaviour
     // 距離を判定する
     private EnemyState CheckDistance()
     {
+        // ターゲットが消滅していたら（Player死亡時など）
+        if (target == null)
+        {
+            SearchDefaultTarget();
+        }
+
+        // それでも見つからないなら待機
+        if (target == null) return EnemyState.Battle;
+
         float distance = Vector3.Distance(transform.position, target.position);
         // 攻撃範囲より遠い場合
         if (distance > attackRange)
@@ -153,9 +172,18 @@ public class EnemyAI : MonoBehaviour
             return EnemyState.Battle; // 「近いから攻撃しよう（Battle）」
         }
     }
-
+    // デフォルト（Payload）を探す処理
+    private void SearchDefaultTarget()
+    {
+        GameObject foundObject = GameObject.FindWithTag(defaultTargetTag);
+        if (foundObject != null)
+        {
+            target = foundObject.transform;
+        }
+    }
     // ⚡ ダメージ検知（イベント）
-    private void OnDamageTaken(Vector3 attackerPosition)
+    // 💡 Step 13 変更: 引数 attacker を受け取る
+    private void OnDamageTaken(Vector3 hitPos, Transform attacker)
     {
         if (currentState == EnemyState.Stun) return;
 
@@ -173,7 +201,16 @@ public class EnemyAI : MonoBehaviour
         }
 
         // 3. 物理ノックバック適用
-        ApplyKnockbackForce(attackerPosition);
+        ApplyKnockbackForce(hitPos);
+
+        // Step13 ヘイト移行: 攻撃者がいて、今のターゲットと違うなら切り替える
+        if (attacker != null)
+        {
+            if (target != attacker)
+            {
+                target = attacker;
+            }
+        }
 
         // 4. ステートマシンを再起動（Stun状態から始まる）
         StartCoroutine(MainStateMachine());

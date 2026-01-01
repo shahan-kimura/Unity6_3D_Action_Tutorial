@@ -36,8 +36,9 @@ public class Hitbox : MonoBehaviour
             CriticalType type;
             int damage = source.CalculateDamage(out type);
 
-            // ダメージとタイプを渡す
-            receiverStatus.Damage(damage, other.transform.position, type);
+            // 💡 Step 13 変更: source.OwnerTransform を引数に追加
+            // ここでレーザーではなく「Player本体」が渡される
+            receiverStatus.Damage(damage, other.transform.position, type, source.OwnerTransform);
         }
     }
 }

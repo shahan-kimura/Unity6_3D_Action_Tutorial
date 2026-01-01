@@ -44,7 +44,7 @@ public class VFXDamageFeedback : MonoBehaviour
     }
 
     // ダメージイベントから呼ばれる
-    void PlayGlitch(Vector3 attackerPos)
+    void PlayGlitch(Vector3 hitPos, Transform attacker)
     {
         // 💡 修正: 死に始めていたら、グリッチ演出は無視する（StopAllCoroutinesさせない！）
         if (isDying) return;

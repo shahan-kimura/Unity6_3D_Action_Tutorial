@@ -38,6 +38,23 @@ public class DamageSource : MonoBehaviour
         this.ownerStatus = owner;
     }
 
+    // 💡 Step 13 追加: 持ち主の場所を教えるプロパティ
+    // これがあるおかげで、レーザーが消えても「撃った人」を特定できる
+    public Transform OwnerTransform
+    {
+        get
+        {
+            if (ownerStatus != null)
+            {
+                return ownerStatus.transform;
+            }
+            else
+            {
+                return this.transform; // 持ち主がいなければ自分（罠など）
+            }
+        }
+    }
+
     // 💡 Step 8.5 変更: 計算結果だけでなく、クリティカルの種類も一緒に返す
     // 【outキーワードについて】
     // 戻り値(int)とは別に、もう一つの結果(CriticalType)を呼び出し元に返すための仕組みです。

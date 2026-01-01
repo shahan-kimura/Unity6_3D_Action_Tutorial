@@ -7,7 +7,6 @@ using UnityEngine.AI; // NavMeshAgentを使うために必要
 // ランダム行動の一つとして実行してくれます。
 public class EnemyActionChase : EnemyAction
 {
-    private Transform target;
     private NavMeshAgent agent;
     private Rigidbody rb;
     
@@ -20,7 +19,6 @@ public class EnemyActionChase : EnemyAction
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        target = GameObject.FindWithTag("Player").GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
 
         if (agent == null)
@@ -82,10 +80,10 @@ public class EnemyActionChase : EnemyAction
         // 指定時間だけ追いかけ続ける
         while (timer < chaseDuration)
         {
-            // ターゲットが生きていて、Agentが有効なら目的地を更新
-            if (target != null && agent.enabled)
+            // 💡Step13.1 修正: "Target" は親クラスで取得したプロパティを指すようになる
+            if (Target != null && agent.enabled)
             {
-                agent.SetDestination(target.position);
+                agent.SetDestination(Target.position);
             }
             
             // 毎フレーム更新

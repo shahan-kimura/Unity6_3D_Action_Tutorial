@@ -44,12 +44,12 @@ public class KnockbackOnly : MonoBehaviour
     }
     
     // 💡 外部からのトリガー：StatusManagerから呼び出されるノックバック開始メソッド
-    public void StartKnockback(Vector3 attackerPosition)
+    public void StartKnockback(Vector3 hitPos, Transform attacker)
     {
         if (isKnockedBack) return; // 二重ノックバックを防止
         
         // 割り込み処理であるKnockbackRoutineコルーチンを実行
-        StartCoroutine(KnockbackRoutine(attackerPosition));
+        StartCoroutine(KnockbackRoutine(hitPos));
     }
 
     // 💡 処理の本体：ノックバックの物理的な力と硬直時間を時間軸で制御します。

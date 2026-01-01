@@ -6,8 +6,6 @@ using UnityEngine;
 // 敵へ「突進」と「クールダウン」を繰り返す行動を管理します。
 public class EnemyActionDash : EnemyAction
 {
-    [SerializeField] Transform target;
-    
     // --- インスペクターから設定できる項目 ---
     [Header("Dash Settings")]
     [SerializeField] float dashSpeed = 15f;         // 突進時の速度
@@ -28,8 +26,6 @@ public class EnemyActionDash : EnemyAction
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        // "Player"というタグのオブジェクトを探して、ターゲットとして設定します。
-        target = GameObject.FindWithTag("Player").GetComponent<Transform>();
         
         if (rb == null)
         {
@@ -69,8 +65,8 @@ public class EnemyActionDash : EnemyAction
         // タメ動作中、ターゲットの方を向き続けます
         while (Time.time < startTime + dashPreparationTime)
         {
-            // ターゲットを凝視し、向きを固定します 
-            dashDirection = (target.position - transform.position);
+            // 💡 Step13.1修正: "Target" は親クラスのプロパティを指すようになる
+            dashDirection = (Target.position - transform.position);
             dashDirection.y = 0; // 水平方向のみ回転させるためY軸は無視
             rb.rotation = Quaternion.LookRotation(dashDirection); // Rigidbodyの回転を直接操作
 

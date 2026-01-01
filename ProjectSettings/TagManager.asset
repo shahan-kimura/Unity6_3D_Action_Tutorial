@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - PlayerAttack
+  - Payload
   layers:
   - Default
   - TransparentFX

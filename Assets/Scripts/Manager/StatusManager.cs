@@ -59,7 +59,8 @@ public class StatusManager : MonoBehaviour
 
     // 💡 Step6.1新規追加：ダメージを受けたことを通知するイベント
     // Vector3は攻撃者の位置。購読者はこれを受け取り、ノックバック方向を計算します。
-    public event Action<Vector3> OnDamageTaken;
+    // 💡 Step 13 変更: イベントに攻撃者(Transform=タグ名等を含む情報)を追加
+    public event Action<Vector3, Transform> OnDamageTaken; 
     // Step10.2 死亡演出をイベント化
     public event Action OnDead;
 
@@ -71,8 +72,9 @@ public class StatusManager : MonoBehaviour
         // HPを最大値で開始
         hp = maxHp;
     }
-    // 💡 Step 8.5 変更: 引数に CriticalType を追加
-    public void Damage(int damage, Vector3 attackerPosition, CriticalType type)
+    // 💡 Step 13 変更: 引数 attacker を追加
+    public void Damage(int damage, Vector3 hitPos, CriticalType type, Transform attacker)
+
     {
         // HPを減少させ、ダメージエフェクトを発生させる
         hp -= damage;
@@ -86,9 +88,9 @@ public class StatusManager : MonoBehaviour
         // 数値を渡してセットアップ
         popup.Setup(damage,type);
 
-        // 💡 Step6.1新規追加：ダメージを受けたことを通知します
-        OnDamageTaken?.Invoke(attackerPosition);
-        
+        // 💡 Step 13 変更: イベント通知に攻撃者情報を追加
+        OnDamageTaken?.Invoke(hitPos, attacker);
+
         //　Step10.2 hpが0以下の際の処理を移動
         if (hp <= 0)
         {

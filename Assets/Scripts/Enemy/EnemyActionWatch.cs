@@ -5,9 +5,6 @@ using UnityEngine;
 // 💡 敵の「監視（警戒しながらターゲットを向いて待機）」という行動だけを管理するスクリプトです。
 public class EnemyActionWatch : EnemyAction
 {
-    // ターゲット（主にPlayer）の情報を入れるための箱です。
-    Transform target;
-    
     // 💡 実行中のコルーチン（行動ルーチン）を停止させるために覚えておく変数です。
     private Coroutine watchRoutine;
 
@@ -22,8 +19,6 @@ public class EnemyActionWatch : EnemyAction
     // ゲーム開始時に一度だけ呼ばれます
     void Start()
     {
-        // "Player"というタグのオブジェクトを探して、ターゲットとして設定します。
-        target = GameObject.FindWithTag("Player").GetComponent<Transform>(); 
         // 💡 Rigidbodyを取得
         rb = GetComponent<Rigidbody>();
         if (rb == null)
@@ -68,7 +63,8 @@ public class EnemyActionWatch : EnemyAction
             // ----------------------------------------------------
             // 💡 1. Y軸を無視した LookAt の実装（回転）
             // ----------------------------------------------------
-            Vector3 direction = target.position - transform.position;
+            // 💡 Step13.1修正: "Target" は親クラスのプロパティを指すようになる
+            Vector3 direction = Target.position - transform.position;
             direction.y = 0; 
             
             if (direction != Vector3.zero)
