@@ -68,6 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   expAmount: 50
   mainObject: {fileID: 3184435821137961412}
+  pickupSE: {fileID: 1083421981849289203, guid: 4079550287aa3f848aca8a4445f6121b, type: 3}
 --- !u!1 &3184435821137961412
 GameObject:
   m_ObjectHideFlags: 0

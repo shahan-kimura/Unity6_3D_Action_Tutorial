@@ -165,5 +165,17 @@ public class StatusManager : MonoBehaviour
         // ログ確認用
         Debug.Log($"LEVEL UP! Lv.{level} HP:{maxHp} ATK:{currentAttack}");
     }
+    // Step16 Lv指定
+    public void SetLevel(int newLevel)
+    {
+        // 変数を書き換え
+        level = newLevel;
+
+        // ステータス再計算 (Step 8.6で作ったメソッド)
+        UpdateStatus();
+
+        // HPを全快にする
+        hp = maxHp; // (または health = maxHp)
+    }
 
 }

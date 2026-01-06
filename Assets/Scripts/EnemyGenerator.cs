@@ -12,6 +12,9 @@ public class EnemyGenerator : MonoBehaviour
 
     private bool isSpawning = false; // 敵の生成が開始されているかどうかのフラグ
 
+    [Header("Difficulty")]
+    [SerializeField] int spawnLevel = 1; // Step16 これを変えれば強さが変わる
+
     private void OnTriggerEnter(Collider other)
     {
         //プレイヤーに接触したらEnemyをSpawnさせる
@@ -37,6 +40,13 @@ public class EnemyGenerator : MonoBehaviour
 
             // 敵をスポーンポイントにスポーンさせる
             Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            
+            // Step16 レベルを適用
+            StatusManager status = enemyPrefab.GetComponent<StatusManager>();
+            if (status != null)
+            {
+                status.SetLevel(spawnLevel);
+            }
 
             // 指定された間隔で次の敵をスポーンさせる
             yield return new WaitForSeconds(spawnInterval);
