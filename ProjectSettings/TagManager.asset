@@ -18,8 +18,8 @@ TagManager:
   - PlayerHitbox
   - EnemyAttack
   - EnemyHitbox
-  - 
-  - 
+  - Enemy
+  - Player
   - 
   - 
   - 

@@ -1,72 +1,79 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SimpleLaser : MonoBehaviour
 {
-    Vector3 acceleration; // ƒŒ[ƒU[‚Ì‰Á‘¬“x
-    Vector3 velocity; // ƒŒ[ƒU[‚Ì‘¬“x
-    Vector3 position; // ƒŒ[ƒU[‚ÌˆÊ’u
-    Transform target; // ƒŒ[ƒU[‚Ìƒ^[ƒQƒbƒg
+    Vector3 acceleration; // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®åŠ é€Ÿåº¦
+    Vector3 velocity; // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®é€Ÿåº¦
+    Vector3 position; // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®ä½ç½®
+    Transform target; // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 
-    [SerializeField][Tooltip("’…’eŠÔ")] float period = 1f; // ƒŒ[ƒU[‚ªƒ^[ƒQƒbƒg‚É“’B‚·‚éŠÔ
-    [SerializeField][Tooltip("’…’e·")] float deltaPeriod = 0.5f; // ’…’eŠÔ‚Ìƒ‰ƒ“ƒ_ƒ€‚È•Ï“®”ÍˆÍ
-    [SerializeField][Tooltip("x²‰‘¬")] float x_initial_v = 10f; // X²•ûŒü‚Ì‰‘¬“x
-    [SerializeField][Tooltip("y²‰‘¬")] float y_initial_v = 10f; // Y²•ûŒü‚Ì‰‘¬“x
-    [SerializeField][Tooltip("z²‰‘¬")] float z_initial_v = 10f; // Z²•ûŒü‚Ì‰‘¬“x
+    [SerializeField][Tooltip("ç€å¼¾æ™‚é–“")] float period = 1f; // ãƒ¬ãƒ¼ã‚¶ãƒ¼ãŒã‚¿ãƒ¼ã‚²ãƒƒãƒˆã«åˆ°é”ã™ã‚‹æ™‚é–“
+    [SerializeField][Tooltip("ç€å¼¾æ™‚å·®")] float deltaPeriod = 0.5f; // ç€å¼¾æ™‚é–“ã®ãƒ©ãƒ³ãƒ€ãƒ ãªå¤‰å‹•ç¯„å›²
+    [SerializeField][Tooltip("xè»¸åˆé€Ÿ")] float x_initial_v = 10f; // Xè»¸æ–¹å‘ã®åˆé€Ÿåº¦
+    [SerializeField][Tooltip("yè»¸åˆé€Ÿ")] float y_initial_v = 10f; // Yè»¸æ–¹å‘ã®åˆé€Ÿåº¦
+    [SerializeField][Tooltip("zè»¸åˆé€Ÿ")] float z_initial_v = 10f; // Zè»¸æ–¹å‘ã®åˆé€Ÿåº¦
 
-    [SerializeField][Tooltip("ƒ^ƒQƒƒX‚Ì”òsŠÔ")] float lingerTime = 2f; // ƒ^[ƒQƒbƒg‚ª‚¢‚È‚­‚È‚Á‚Ä‚©‚ç‚Ì‘Ä«”òsŠÔ
-    private bool targetLost = false; // ƒ^[ƒQƒbƒg‚ª¸‚í‚ê‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
+    [SerializeField][Tooltip("ã‚¿ã‚²ãƒ­ã‚¹æ™‚ã®é£›è¡Œæ™‚é–“")] float lingerTime = 2f; // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã„ãªããªã£ã¦ã‹ã‚‰ã®æƒ°æ€§é£›è¡Œæ™‚é–“
+    private bool targetLost = false; // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒå¤±ã‚ã‚ŒãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
 
     void Start()
     {
-        // GameObject.FindWithTag("Enemy") ‚ÌŒ‹‰Ê‚ªnull‚©‚Ç‚¤‚©‚ğæ‚Éƒ`ƒFƒbƒN‚·‚é
+        // GameObject.FindWithTag("Enemy") ã®çµæœãŒnullã‹ã©ã†ã‹ã‚’å…ˆã«ãƒã‚§ãƒƒã‚¯ã™ã‚‹
         GameObject enemyObject = GameObject.FindWithTag("Enemy");
 
-        // ƒ^[ƒQƒbƒg‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡AƒIƒuƒWƒFƒNƒg‚ğ”jŠü
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´æ£„
         if (enemyObject == null)
         {
             Destroy(gameObject);
             return;
         }
-
-        // EnemyƒIƒuƒWƒFƒNƒg‚ªŒ©‚Â‚©‚Á‚½ê‡‚Ì‚İATransform‚ğæ“¾
-        target = enemyObject.GetComponent<Transform>();
-
-        // ƒŒ[ƒU[‚Ì‰ŠúˆÊ’u‚ğİ’è
+        if (target == null)
+        {
+            // Enemyã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè¦‹ã¤ã‹ã£ãŸå ´åˆã®ã¿ã€Transformã‚’å–å¾—
+            target = enemyObject.GetComponent<Transform>();
+        }
+        // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®åˆæœŸä½ç½®ã‚’è¨­å®š
         position = transform.position;
 
-        // ƒŒ[ƒU[‚Ì‰Šú‘¬“x‚ğƒ‰ƒ“ƒ_ƒ€‚Éİ’èA’n–Ê‚ß‚è‚İ‹Ö~‚Åy²‚Ì‚İ0ˆÈã‚É
+        // ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®åˆæœŸé€Ÿåº¦ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«è¨­å®šã€åœ°é¢ã‚ã‚Šè¾¼ã¿ç¦æ­¢ã§yè»¸ã®ã¿0ä»¥ä¸Šã«
         velocity = new Vector3(Random.Range(-x_initial_v, x_initial_v),
                                 Random.Range(0, y_initial_v),
                                 Random.Range(-z_initial_v, z_initial_v));
 
-        // ’…’eŠÔ‚ğƒ‰ƒ“ƒ_ƒ€‚É•Ï“®‚³‚¹‚é
+        // ç€å¼¾æ™‚é–“ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å¤‰å‹•ã•ã›ã‚‹
         period += Random.Range(-deltaPeriod, deltaPeriod);
+    }
+
+    // ğŸ’¡ å¤–éƒ¨ã‹ã‚‰ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’æŒ‡å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    public void SetTarget(Transform newTarget)
+    {
+        this.target = newTarget;
     }
 
     void Update()
     {
-        // ƒ^[ƒQƒbƒg‚ª‘¶İ‚·‚éê‡A’Ç]‚·‚é
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒå­˜åœ¨ã™ã‚‹å ´åˆã€è¿½å¾“ã™ã‚‹
         if (target != null)
         {
-            //‰^“®•û’ö®Ft•bŠÔ‚Éi‚Ş‹——£(diff) = (‰‘¬“x(v) * t) { (1/2 *‰Á‘¬“x(a) * t^2)
-            //•ÏŒ`‚·‚é‚Æ
-            //‰^“®•û’ö®F‰Á‘¬“x(a) = 2*(diff - (v * t)) / t^2 
-            //‚È‚Ì‚ÅAu‘¬“xv‚Ì•¨‘Ì‚ªt•bŒã‚Édiffi‚Ş‚½‚ß‚Ì‰Á‘¬“xav‚ªZo‚Å‚«‚é
-            //GameObject‚Ìv‚Íæ“¾‚Å‚«‚é‚µAt‚àæ“¾‚Å‚«‚é
-            //‚È‚çAƒŒ[ƒU[‚ªperiod•bŒã‚É“’…idiff‚ª0j‚·‚é‚½‚ß‚É•K—v‚Èa‚ªZo‚Å‚«‚é
+            //é‹å‹•æ–¹ç¨‹å¼ï¼štç§’é–“ã«é€²ã‚€è·é›¢(diff) = (åˆé€Ÿåº¦(v) * t) ï¼‹ (1/2 *åŠ é€Ÿåº¦(a) * t^2)
+            //å¤‰å½¢ã™ã‚‹ã¨
+            //é‹å‹•æ–¹ç¨‹å¼ï¼šåŠ é€Ÿåº¦(a) = 2*(diff - (v * t)) / t^2 
+            //ãªã®ã§ã€ã€Œé€Ÿåº¦vã®ç‰©ä½“ãŒtç§’å¾Œã«diffé€²ã‚€ãŸã‚ã®åŠ é€Ÿåº¦aã€ãŒç®—å‡ºã§ãã‚‹
+            //GameObjectã®vã¯å–å¾—ã§ãã‚‹ã—ã€tã‚‚å–å¾—ã§ãã‚‹
+            //ãªã‚‰ã€ãƒ¬ãƒ¼ã‚¶ãƒ¼ãŒperiodç§’å¾Œã«åˆ°ç€ï¼ˆdiffãŒ0ï¼‰ã™ã‚‹ãŸã‚ã«å¿…è¦ãªaãŒç®—å‡ºã§ãã‚‹
 
-            acceleration = Vector3.zero; // ‰Šú‰Á‘¬“x‚ğ0‚Éİ’è
+            acceleration = Vector3.zero; // åˆæœŸåŠ é€Ÿåº¦ã‚’0ã«è¨­å®š
 
-            Vector3 diff = target.position - position; // ƒ^[ƒQƒbƒg‚Æ‚Ì‹——£‚ğŒvZ
+            Vector3 diff = target.position - position; // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã®è·é›¢ã‚’è¨ˆç®—
 
-            // •K—v‚È‰Á‘¬“x‚ğŒvZ
+            // å¿…è¦ãªåŠ é€Ÿåº¦ã‚’è¨ˆç®—
             acceleration += (diff - velocity * period) * 2f / (period * period);
 
-            period -= Time.deltaTime; // c‚è‚ÌŠúŠÔ‚ğŒ¸­‚³‚¹‚é
+            period -= Time.deltaTime; // æ®‹ã‚Šã®æœŸé–“ã‚’æ¸›å°‘ã•ã›ã‚‹
 
-            // period‚ª0–¢–‚É‚È‚Á‚½ê‡AƒIƒuƒWƒFƒNƒg‚ğ”j‰ó
+            // periodãŒ0æœªæº€ã«ãªã£ãŸå ´åˆã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´å£Š
             if (period < 0f)
             {
                 Destroy(gameObject);
@@ -76,25 +83,25 @@ public class SimpleLaser : MonoBehaviour
         }
         else if (!targetLost)
         {
-            // ƒ^[ƒQƒbƒg‚ª¸‚í‚ê‚½ê‡Aƒtƒ‰ƒO‚ğ—§‚Ä‚Ä‘Ä«‚Ì‚½‚ß‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·
+            // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒå¤±ã‚ã‚ŒãŸå ´åˆã€ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã¦æƒ°æ€§ã®ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™
             targetLost = true;
-            // ƒ^[ƒQƒbƒg‚ª¸‚í‚ê‚½ê‡AlingerTime•bŒã‚ÉƒIƒuƒWƒFƒNƒg‚ğ”j‰ó
+            // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒå¤±ã‚ã‚ŒãŸå ´åˆã€lingerTimeç§’å¾Œã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´å£Š
             StartCoroutine(DestroyLaser(lingerTime));
         }
 
-        // Œ»İ‚Ì‘¬“x‚ğXV
+        // ç¾åœ¨ã®é€Ÿåº¦ã‚’æ›´æ–°
         velocity += acceleration * Time.deltaTime;
 
-        // Œ»İ‚ÌˆÊ’u‚ğXV
+        // ç¾åœ¨ã®ä½ç½®ã‚’æ›´æ–°
         position += velocity * Time.deltaTime;
 
-        // ƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u‚ğXV
+        // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®ã‚’æ›´æ–°
         transform.position = position;
 
     }
     IEnumerator DestroyLaser(float delay)
     {
-        yield return new WaitForSeconds(delay); // w’èŠÔ‘Ò‹@
-        Destroy(gameObject); // ‘Ò‹@Œã‚É”j‰ó
+        yield return new WaitForSeconds(delay); // æŒ‡å®šæ™‚é–“å¾…æ©Ÿ
+        Destroy(gameObject); // å¾…æ©Ÿå¾Œã«ç ´å£Š
     }
 }

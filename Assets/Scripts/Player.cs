@@ -39,6 +39,17 @@ public class Player : MonoBehaviour
 
     private StatusManager statusManager;
 
+    [Header("Combat Settings")]
+    [SerializeField] float meleeImpulse = 20f;
+    [SerializeField] float dashDuration = 0.2f;
+
+    // レイヤー番号のキャッシュ用
+    private int playerLayer;
+    private int enemyLayer;
+
+    // 💡 追加: ダッシュ中かどうかのフラグ
+    private bool isDashing = false;
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -49,12 +60,18 @@ public class Player : MonoBehaviour
         {
             statusManager.OnDead += OnDeadHandler;
         }
+        // レイヤー番号を取得しておく
+        playerLayer = LayerMask.NameToLayer("Player");
+        enemyLayer = LayerMask.NameToLayer("Enemy"); // ※敵のレイヤー名に合わせてね
     }
 
     void FixedUpdate()
     {
-        // Rigidbodyでの移動になるため、FixedUpdateに変更しMove関数を呼び出すだけに
-        Move();
+        // 💡 修正: ダッシュ中は通常の移動処理（速度上書き）をしない！
+        if (!isDashing)
+        {
+            Move();
+        }
     }
 
     // 指定した速度で、このキャラクターを移動させます。
@@ -161,7 +178,45 @@ public class Player : MonoBehaviour
     public void Attack()
     {
         playerAnimator.SetTrigger("CrossRangeAttack");
+        StartCoroutine(DashRoutine());
     }
+    IEnumerator DashRoutine()
+    {
+        if (rigidbody != null)
+        {
+            // 💡 追加: ダッシュ開始フラグON
+            isDashing = true;
+
+            // 1. 敵との衝突だけを無効化 (床や壁、Payloadには当たる！)
+            Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+
+            // 2. 加速
+            rigidbody.linearVelocity = Vector3.zero;
+            //  Y軸（高さ成分）を0にして、水平方向にのみ飛ばす
+            Vector3 dashDir = transform.forward;
+            dashDir.y = 0;
+            dashDir.Normalize();
+            rigidbody.AddForce(transform.forward * meleeImpulse, ForceMode.Impulse);
+
+            // 3. 待機
+            yield return new WaitForSeconds(dashDuration);
+
+            // 4. 衝突を有効に戻す
+            Physics.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+
+            // 5. 停止
+            rigidbody.linearVelocity = Vector3.zero;
+            // ダッシュ終了フラグOFF
+            isDashing = false;
+        }
+    }
+
+    // 安全策：もしダッシュ中に死んだりしてスクリプトが無効になっても、当たり判定は戻す
+    void OnDisable()
+    {
+        Physics.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+    }
+
     // Attack のInputによって呼び出されます。
     public void OnAttack(InputAction.CallbackContext context)
     {
