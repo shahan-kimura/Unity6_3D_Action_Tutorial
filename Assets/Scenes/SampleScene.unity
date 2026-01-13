@@ -3269,6 +3269,14 @@ PrefabInstance:
       propertyPath: enemyPrefab
       value: 
       objectReference: {fileID: 4249040475002768782, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+    - target: {fileID: 393864662622662816, guid: 9071f8a78fa870e48abd015e0b637b8a, type: 3}
+      propertyPath: spawnAreaOffset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 393864662622662816, guid: 9071f8a78fa870e48abd015e0b637b8a, type: 3}
+      propertyPath: spawnAreaOffset.z
+      value: -10
+      objectReference: {fileID: 0}
     - target: {fileID: 1136116248188874948, guid: 9071f8a78fa870e48abd015e0b637b8a, type: 3}
       propertyPath: m_Name
       value: EnemyGenerator
@@ -4913,6 +4921,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1951604933006099710, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951604933006099710, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Name
+      value: Color
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951604933006099710, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951604933006099710, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951604933006099710, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 3.4666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951604933006099710, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
+      value: 3.9999995
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951604933006099710, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4249040475002768782, guid: ca3f35c726648ae43b89800a37579bdc, type: 3}
       propertyPath: m_Name
       value: IntelligenceEnemy

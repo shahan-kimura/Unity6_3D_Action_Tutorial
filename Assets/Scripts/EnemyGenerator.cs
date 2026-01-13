@@ -9,6 +9,7 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField] private int enemiesToSpawn = 5; // 各フェーズで出現する敵の数
 
     [SerializeField] private float spawnOffsetRange = 5f; // 生成位置のランダムなオフセット範囲
+    [SerializeField] private Vector3 spawnAreaOffset = Vector3.zero;
 
     private bool isSpawning = false; // 敵の生成が開始されているかどうかのフラグ
 
@@ -32,7 +33,7 @@ public class EnemyGenerator : MonoBehaviour
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             // 自身の位置を基準にランダムにオフセット
-            Vector3 spawnPosition = transform.position + new Vector3(
+            Vector3 spawnPosition = transform.position + spawnAreaOffset + new Vector3(
                 Random.Range(-spawnOffsetRange, spawnOffsetRange),
                 0f, // 高さのオフセットは0に設定（必要に応じて変更可能）
                 Random.Range(-spawnOffsetRange, spawnOffsetRange)
