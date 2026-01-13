@@ -578,7 +578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actionType: 1
-  chaseDuration: 1
+  chaseDuration: 2
 --- !u!114 &3857339114335097008
 MonoBehaviour:
   m_ObjectHideFlags: 0

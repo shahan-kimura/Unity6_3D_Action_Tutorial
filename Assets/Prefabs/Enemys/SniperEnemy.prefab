@@ -390,8 +390,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statsData: {fileID: 11400000, guid: 16ffcebebd454444e860a967c925696d, type: 2}
   MainObject: {fileID: 3275771076032154452}
-  hp: 1090
-  maxHp: 1090
+  hp: 100
+  maxHp: 100
   level: 1
   currentExp: 0
   expToNextLevel: 550

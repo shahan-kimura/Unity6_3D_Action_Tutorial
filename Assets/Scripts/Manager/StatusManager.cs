@@ -177,5 +177,10 @@ public class StatusManager : MonoBehaviour
         // HPを全快にする
         hp = maxHp; // (または health = maxHp)
     }
+    // 回復アイテム用
+    public void MaxHeal()
+    {
+        hp = maxHp;
+    }
 
 }
